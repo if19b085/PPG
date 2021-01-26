@@ -1,0 +1,4 @@
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\PPB.exe
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.csprojAssemblyReference.cache
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.AssemblyInfoInputs.cache
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.AssemblyInfo.cs
