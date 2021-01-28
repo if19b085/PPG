@@ -1,7 +1,7 @@
 ﻿
 namespace PPB.Game
 {
-    enum Outcome
+    public enum Outcome
     {
         Win,
         Lose,

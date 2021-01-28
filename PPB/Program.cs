@@ -6,7 +6,9 @@ namespace PPB
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Starting server on port 10001!");
+            Http.Server server = new Http.Server(10001);
+            server.Start();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 
-namespace HTTPServer
+namespace PPB.Http
 {
     /*
     HTTP/1.1 200 OK
@@ -27,8 +27,8 @@ Content-length: 78
     class Response
     {
         public NetworkStream stream;
-
         public Response(NetworkStream _stream)
+
         {
             stream = _stream;
         }
@@ -37,7 +37,7 @@ Content-length: 78
         {
             StreamWriter writer = new StreamWriter(stream) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(HTTPServer.VERSION + " " + status);
+            sb.AppendLine(Server.VERSION + " " + status);
             sb.AppendLine("Content-Type: " + contentType);
             sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
             sb.AppendLine();
@@ -50,7 +50,7 @@ Content-length: 78
         {
             StreamWriter writer = new StreamWriter(stream) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(HTTPServer.VERSION + " " + status);
+            sb.AppendLine(Server.VERSION + " " + status);
             sb.AppendLine("Content-Type: ");
             sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
             sb.AppendLine();
@@ -63,7 +63,7 @@ Content-length: 78
         {
             StreamWriter writer = new StreamWriter(stream) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(HTTPServer.VERSION + " " + status);
+            sb.AppendLine(Server.VERSION + " " + status);
             sb.AppendLine("Content-Type: ");
             sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
             sb.AppendLine();

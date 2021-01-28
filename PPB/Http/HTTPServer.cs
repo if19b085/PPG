@@ -8,20 +8,22 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
-namespace HTTPServer
+namespace PPB.Http
 {
-    public class HTTPServer
+    public class Server
     {
-        public const String MSG_DIR = "/root/msg/";
-        public const String WEB_DIR = "/root/web";
-        public const String VERSION = "HTTP/1.1";
-        public const String NAME = "PPB";
+        public const string MSG_DIR = "/root/msg/";
+        public const string WEB_DIR = "/root/web";
+        public const string VERSION = "HTTP/1.1";
+        public const string NAME = "PPB";
         private bool running = false;
+
+        private string request = "";
 
 
         private TcpListener listener;
 
-        public HTTPServer(int port)
+        public Server(int port)
         {
             listener = new TcpListener(IPAddress.Any, port);
         }
@@ -39,12 +41,7 @@ namespace HTTPServer
 
             while (running)
             {
-                Debug.WriteLine("Waiting for connection..");
-
                 TcpClient client = listener.AcceptTcpClient();
-
-                Debug.WriteLine("Client connected!");
-
                 ThreadPool.QueueUserWorkItem(HandleClient, client);
             }
 
@@ -55,19 +52,18 @@ namespace HTTPServer
         private void HandleClient(Object obj)
         {
             TcpClient client = (TcpClient)obj;
-            string msg = "";
             //message is "read from port"
             StreamReader reader = new StreamReader(client.GetStream());
             //message is stored 
             while (reader.Peek() != -1)
             {
-                msg += (char)reader.Read();
+                request += (char)reader.Read();
             }
-            //parsing of request
-            Request request = new Request(msg);
-            //Do something with request
+            Console.WriteLine(request);
             client.Close();        
         }
+
+        
         
         
         

@@ -1,6 +1,6 @@
 ﻿namespace PPB.Game
 {
-    enum Handtype
+    public enum Handtype
     {
         Rock,
         Paper,
