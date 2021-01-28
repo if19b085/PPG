@@ -7,7 +7,7 @@ namespace PPB.Game
     class Game
     {
         public List<string> gameLog = new List<string>();
-        public List<User> tournamentContestant;
+        public List<User> tournamentContestants;
         private int roundsPlayed = 0;
         //Intialize the diffrent Hands
         Rock rock = new Rock();
@@ -15,9 +15,9 @@ namespace PPB.Game
         Scissors scissors = new Scissors();
         Lizzard lizzard = new Lizzard();
         Vulcanian vulcanian = new Vulcanian();
-        public Game(List<User> _tournamentContestant)
+        public Game(List<User> _tournamentContestants)
         {
-            tournamentContestant = _tournamentContestant;
+            tournamentContestants = _tournamentContestants;
             Battle();
         }
         private void Battle()
@@ -26,7 +26,22 @@ namespace PPB.Game
             do
             {
                 //rounds
-
+                Outcome battleOutcome;
+                for (int i = 0; i < tournamentContestants.Count; i++)
+                {
+                    for(int j = i+1; j == tournamentContestants.Count; j++)
+                    {
+                        battleOutcome = DetermineOutcome(tournamentContestants[i].set[roundsPlayed], tournamentContestants[j].set[roundsPlayed]);
+                        if(battleOutcome == Outcome.Win)
+                        {
+                            tournamentContestants[i].BattleWon();
+                        }
+                        else if (battleOutcome == Outcome.Lose)
+                        {
+                            tournamentContestants[j].BattleWon();
+                        }
+                    }
+                }
                 roundsPlayed++;
             } while (roundsPlayed < 5);
         }
