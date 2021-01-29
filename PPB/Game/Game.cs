@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PPB.Game
@@ -9,6 +10,9 @@ namespace PPB.Game
         public List<string> gameLog = new List<string>();
         public List<User> tournamentContestants;
         private int roundsPlayed = 0;
+        //
+        private User winner;
+        
         //Intialize the diffrent Hands
         Rock rock = new Rock();
         Paper paper = new Paper();
@@ -19,6 +23,8 @@ namespace PPB.Game
         {
             tournamentContestants = _tournamentContestants;
             Battle();
+            SortByBattlePoints();
+            FindWinner(tournamentContestants);
         }
         private void Battle()
         {
@@ -45,8 +51,7 @@ namespace PPB.Game
                 roundsPlayed++;
             } while (roundsPlayed < 5);
         }
-
-        public Outcome DetermineOutcome(Handtype handtypeOne, Handtype handtypeTwo)
+        private Outcome DetermineOutcome(Handtype handtypeOne, Handtype handtypeTwo)
         {
             switch (handtypeOne)
             {
@@ -64,5 +69,26 @@ namespace PPB.Game
                     return Outcome.Draw;
             }
         }
+        private void FindWinner(List<User> players)
+        {
+            for (int i = 0; i < tournamentContestants.Count; i++)
+            {
+            //Check if the first player in sorted list is really the winner or ties
+                if(tournamentContestants[i].battlePoints > tournamentContestants[i+1].battlePoints && i == 0)
+                {
+                    winner = tournamentContestants[i];
+                }//Now that we have a predecessor we can check normally for the winner
+                else if(tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints && tournamentContestants[i].battlePoints != tournamentContestants[i - 1].battlePoints)
+                {
+                    winner = tournamentContestants[i];
+                }
+            }
+        }
+
+        private void SortByBattlePoints()   
+        {
+            tournamentContestants = tournamentContestants.OrderBy(player => player.battlePoints).ToList();
+        }
+        
     }
 }

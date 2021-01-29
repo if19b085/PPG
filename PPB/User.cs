@@ -7,13 +7,13 @@ namespace PPB
     public class User
     {
         public string username;
-        public string password;
+        private string password;
         //private int score;
         //private bool admin;
         //Used for playing
         public List<Game.Handtype> set;
-        int battlePoints;
-        int roundPoints;
+        public int battlePoints;
+        public int roundPoints;
         //Used for playlist
         //private List<Media.MMC> library = new List<Media.MMC>();
         
@@ -55,17 +55,16 @@ namespace PPB
                                 set[i] = Game.Handtype.Vulcanian;
                                 break;
                             default:
-                                //Give some server feedback that a wrong handtype was entered
-                                Console.WriteLine("Wrong handtype entered at position: " + i);
-                                break;
+                                //Give some feedback that a wrong handtype was entered
+                                throw new InvalidOperationException("Wrong handtype entered at position: " + i);
                         }
                     }
 
                 }
                 else
                 {
-                    //Give some server feedback that a wrong amount of handtypes was entered if != 5
-                    Console.WriteLine("Wrong amount of handtype entered.");
+                    //Give some feedback that a wrong amount of handtypes was entered if != 5
+                    throw new InvalidOperationException("Wrong amount of handtype entered.");
                 }
 
             }
