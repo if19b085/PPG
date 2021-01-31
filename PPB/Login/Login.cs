@@ -7,14 +7,14 @@ namespace PPB.Login
 {
     class Login
     {
-        NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
-        private bool LoginUser(string username, string password)
+        Database db = new Database();
+        public bool LoginUser(User user)
         {
-            connect.Open();
+            db.connect.Open();
             string query = "SELECT COUNT(*) from public.users WHERE username = @username AND password = @password";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("password", password);
+            NpgsqlCommand cmd = new NpgsqlCommand(query, db.connect);
+            cmd.Parameters.AddWithValue("username", user.username);
+            cmd.Parameters.AddWithValue("password", user.password);
             int n = cmd.ExecuteNonQuery();
             NpgsqlDataReader reader = cmd.ExecuteReader();
             int login = 0;
@@ -22,7 +22,7 @@ namespace PPB.Login
             {
                 login = reader.GetInt32(0);
             }
-            connect.Close();
+            db.connect.Close();
             if (login == 1)
             {
                 return true;

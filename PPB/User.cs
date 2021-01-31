@@ -7,9 +7,9 @@ namespace PPB
     public class User
     {
         public string username;
-        private string password;
+        public string password;
         //private int score;
-        //private bool admin;
+        private bool admin;
         //Used for playing
         public List<Game.Handtype> set;
         public int battlePoints;
@@ -73,6 +73,15 @@ namespace PPB
         public void BattleWon()
         {
             battlePoints++;
+        }
+
+        public void RoundWon()
+        {
+            roundPoints++;
+        }
+        public void GiveAdministrator()
+        {
+            admin = true;
         }
     }
 }

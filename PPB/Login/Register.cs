@@ -7,17 +7,17 @@ namespace PPB.Login
 {
     class Register
     {
-        
-        NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
-        private void CreateUser(string username, string password)
+        Database db = new Database();
+        public void CreateUser(User user)
         {
             string query = "INSERT into public.users(username,password) values(@username, @password)";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("password", password);
+            NpgsqlCommand cmd = new NpgsqlCommand(query, db.connect);
+            db.connect.Open();
+            cmd.Parameters.AddWithValue("username", user.username);
+            cmd.Parameters.AddWithValue("password", user.password);
+            //User n later for Error Handling
             int n = cmd.ExecuteNonQuery();
-            connect.Close();
+            db.connect.Close();
         }
     }
 }

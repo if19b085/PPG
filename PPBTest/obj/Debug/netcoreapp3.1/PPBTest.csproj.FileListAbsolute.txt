@@ -1,0 +1,4 @@
+C:\Users\ThomasPleiner\source\repos\PPB\PPBTest\obj\Debug\netcoreapp3.1\PPBTest.csprojAssemblyReference.cache
+C:\Users\ThomasPleiner\source\repos\PPB\PPBTest\obj\Debug\netcoreapp3.1\PPBTest.AssemblyInfoInputs.cache
+C:\Users\ThomasPleiner\source\repos\PPB\PPBTest\obj\Debug\netcoreapp3.1\PPBTest.AssemblyInfo.cs
+C:\Users\ThomasPleiner\source\repos\PPB\PPBTest\obj\Debug\netcoreapp3.1\PPBTest.csproj.CoreCompileInputs.cache

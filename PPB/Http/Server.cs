@@ -23,6 +23,8 @@ namespace PPB.Http
 
         private TcpListener listener;
 
+        TcpClient client;
+
         public Server(int port)
         {
             listener = new TcpListener(IPAddress.Any, port);
@@ -51,7 +53,7 @@ namespace PPB.Http
        
         private void HandleClient(Object obj)
         {
-            TcpClient client = (TcpClient)obj;
+            client = (TcpClient)obj;
             //message is "read from port"
             StreamReader reader = new StreamReader(client.GetStream());
             //message is stored 
@@ -62,11 +64,33 @@ namespace PPB.Http
             Console.WriteLine(request);
             client.Close();        
         }
+        /*
+        public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
+        {
+            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(VERSION + " " + status);
+            sb.AppendLine("Content-Type: ");
+            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
+            sb.AppendLine();
+            sb.AppendLine(message);
+            System.Diagnostics.Debug.WriteLine(sb.ToString());
+            writer.Write(sb.ToString());
+        }
 
-        
-        
-        
-        
+        public void ResponseError(string message, string status = "400", string contentType = "plain/text")
+        {
+            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(VERSION + " " + status);
+            sb.AppendLine("Content-Type: ");
+            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
+            sb.AppendLine();
+            sb.AppendLine(message);
+            System.Diagnostics.Debug.WriteLine(sb.ToString());
+            writer.Write(sb.ToString());
+        }
+        */
     }
-    }
+}
 
