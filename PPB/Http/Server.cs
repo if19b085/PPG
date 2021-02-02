@@ -17,7 +17,6 @@ namespace PPB.Http
 
         private bool running = false;
 
-        private string message = "";
 
         private TcpListener listener;
 
@@ -51,6 +50,8 @@ namespace PPB.Http
        
         private void HandleClient(Object obj)
         {
+            string message = "";
+
             client = (TcpClient)obj;
             //message is "read from port"
             StreamReader reader = new StreamReader(client.GetStream());

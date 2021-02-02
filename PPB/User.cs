@@ -24,34 +24,31 @@ namespace PPB
             SetCreator(_handtypes);
         }
         //User for Game
-        //gets an string like "V,V,R,R,S"
+        //gets an string like "VVRRS"
         private void SetCreator(string handtypes)
         {
-             set = new List<Game.Handtype>();
-
+            set = new List<Game.Handtype>();
             if (!string.IsNullOrEmpty(handtypes))
-            {
-                string[] hand = handtypes.Split(",");
-                
-                if(hand.Length == 5)
+            {  
+                if(handtypes.Length == 5)
                 {
-                    for (int i = 0; i < hand.Length; i++)
+                    for (int i = 0; i < handtypes.Length; i++)
                     {
-                        switch (hand[i])
+                        switch (handtypes[i])
                         {
-                            case "R":
+                            case 'R':
                                 set[i] = Game.Handtype.Rock;
                                 break;
-                            case "P":
+                            case 'P':
                                 set[i] = Game.Handtype.Paper;
                                 break;
-                            case "S":
+                            case 'S':
                                 set[i] = Game.Handtype.Scissors;
                                 break;
-                            case "L":
+                            case 'L':
                                 set[i] = Game.Handtype.Lizzard;
                                 break;
-                            case "V":
+                            case 'V':
                                 set[i] = Game.Handtype.Vulcanian;
                                 break;
                             default:

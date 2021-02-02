@@ -56,6 +56,9 @@ namespace PPB.Http
                 case "/battles":
                     ResponseOK("Neuer Battle wird gestartet.");
                     break;
+                case "/playlist":
+                    ResponseOK("Musikstück soll zu globaler Playlist hinzugefügt werden.");
+                    break;
                 default:
                     ResponseOK("Etwas wird noch nich behandelt.");
                     break;
@@ -103,7 +106,7 @@ namespace PPB.Http
                     ResponseOK("Actions des Users werden geändert.");
                     break;
                 case "/playlist":
-                    ResponseOK("Position eines Musikstückes soll geändert werden");
+                    ResponseOK("Position eines Musikstückes soll geändert werden.");
                     break;
                 default:
                     
@@ -116,23 +119,8 @@ namespace PPB.Http
         {
             switch (command)
             {
-                case "/users":
-                    ResponseOK("Bio des Users wird geändert.");
-                    break;
-                case "/stats":
-                    ResponseOK("Stats des Users wird geändert.");
-                    break;
-                case "/score":
-                    ResponseOK("Score des Users wird geändert.");
-                    break;
                 case "/lib":
-                    ResponseOK("Librabr geändert.");
-                    break;
-                case "/playlist":
-                    ResponseOK("Etwas wird noch nich behandelt.");
-                    break;
-                case "/actions":
-                    ResponseOK("Etwas wird noch nich behandelt.");
+                    ResponseOK("Musikstück soll aus lib gelöscht werden.");
                     break;
                 default:
                     ResponseOK("Etwas wird noch nich behandelt.");
