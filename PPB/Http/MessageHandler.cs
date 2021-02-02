@@ -43,29 +43,21 @@ namespace PPB.Http
             switch (command)
             {
                 case "/users" :
-               
-
+                    ResponseOK("User soll geadded werden.");
                     break;
 
                 case "/sessions":
-                  
+                    ResponseOK("User soll eingeloggt werden.");
                     break;
 
                 case "/lib":
-                  
-                    break;
-                case "/transactions/packages":
-                  
-
-                    break;
-                case "/tradings":
-                    
+                    ResponseOK("Musikstück soll hinzugefügt werden.");
                     break;
                 case "/battles":
-                    
+                    ResponseOK("Neuer Battle wird gestartet.");
                     break;
                 default:
-                    
+                    ResponseOK("Etwas wird noch nich behandelt.");
                     break;
             }
 
@@ -76,25 +68,25 @@ namespace PPB.Http
             switch (command)
             {
                 case "/users":
-                   
+                    ResponseOK("Bio des Users wird abgefragt.");
                     break;
                 case "/stats":
-                  
+                    ResponseOK("Stats des Users wird abgefragt.");
                     break;
                 case "/score":
-                    
+                    ResponseOK("Score des Users wird abgefraglt.");
                     break;
                 case "/lib":
-                    
+                    ResponseOK("Library drs Users wird abgefragt");
                     break;
                 case "/playlist":
-                   
+                    ResponseOK("Globale playlist wird abgefragt.");
                     break;
                 case "/actions":
-
+                    ResponseOK("Gesetzte Actions wird abgefragt");
                     break;
                 default:
-                    
+                    ResponseOK("Etwas wird noch nich behandelt.");
                     break;
             }
 
@@ -104,13 +96,15 @@ namespace PPB.Http
         {
             switch (command)
             {
-                case "/deck":
-                   
+                case "/users":
+                    ResponseOK("Bio des Users wird geändert.");
                     break;
-                case "/deck/unset":
-                    
+                case "/actions":
+                    ResponseOK("Actions des Users werden geändert.");
                     break;
-               
+                case "/playlist":
+                    ResponseOK("Position eines Musikstückes soll geändert werden");
+                    break;
                 default:
                     
                     break;
@@ -120,7 +114,30 @@ namespace PPB.Http
 
         public void DeleteHandler( string command)
         {
-            
+            switch (command)
+            {
+                case "/users":
+                    ResponseOK("Bio des Users wird geändert.");
+                    break;
+                case "/stats":
+                    ResponseOK("Stats des Users wird geändert.");
+                    break;
+                case "/score":
+                    ResponseOK("Score des Users wird geändert.");
+                    break;
+                case "/lib":
+                    ResponseOK("Librabr geändert.");
+                    break;
+                case "/playlist":
+                    ResponseOK("Etwas wird noch nich behandelt.");
+                    break;
+                case "/actions":
+                    ResponseOK("Etwas wird noch nich behandelt.");
+                    break;
+                default:
+                    ResponseOK("Etwas wird noch nich behandelt.");
+                    break;
+            }
         }
 
         public void ResponseOK(string message, string status = "200", string contentType = "plain/text")

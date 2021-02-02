@@ -12,17 +12,16 @@ namespace PPB.Http
 {
     public class Server
     {
-        public const string MSG_DIR = "/root/msg/";
-        public const string WEB_DIR = "/root/web";
         public const string VERSION = "HTTP/1.1";
         public const string NAME = "PPB";
+
         private bool running = false;
 
         private string message = "";
 
         private TcpListener listener;
 
-        TcpClient client;
+        public TcpClient client;
 
         public Server(int port)
         {
