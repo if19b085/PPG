@@ -45,6 +45,7 @@ namespace PPB.Game
                 else
                 {
                     //If we are not the one to start the torunament (=host) and the tournament has already started we have nothing to do here -> kick him
+
                 }
             }
             
@@ -109,7 +110,7 @@ namespace PPB.Game
             return gameLog;
         }
 
-        private Outcome DetermineOutcome(Handtype handtypeOne, Handtype handtypeTwo)
+        public Outcome DetermineOutcome(Handtype handtypeOne, Handtype handtypeTwo)
         {
             switch (handtypeOne)
             {
@@ -127,7 +128,7 @@ namespace PPB.Game
                     return Outcome.Draw;
             }
         }
-        private void FindRoundWinner(List<User> players , int roundsPlayed)
+        public void FindRoundWinner(List<User> players , int roundsPlayed)
         {
             for (int i = 0; i < tournamentContestants.Count; i++)
             {
@@ -148,7 +149,7 @@ namespace PPB.Game
             }
         }
 
-        private void FindWinner(List<User> players)
+        public void FindWinner(List<User> players)
         {
             for (int i = 0; i < tournamentContestants.Count; i++)
             {
@@ -169,12 +170,12 @@ namespace PPB.Game
             }
         }
 
-        private void SortByBattlePoints()
+        public void SortByBattlePoints()
         {
             tournamentContestants = tournamentContestants.OrderBy(player => player.battlePoints).ToList();
         }
 
-        private void SortByRoundPoints()
+        public void SortByRoundPoints()
         {
             tournamentContestants = tournamentContestants.OrderBy(player => player.roundPoints).ToList();
         }

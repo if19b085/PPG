@@ -18,8 +18,7 @@ namespace PPB.Http
         public const string NAME = "PPB";
         private bool running = false;
 
-        private string request = "";
-
+        private string message = "";
 
         private TcpListener listener;
 
@@ -59,38 +58,14 @@ namespace PPB.Http
             //message is stored 
             while (reader.Peek() != -1)
             {
-                request += (char)reader.Read();
+                message += (char)reader.Read();
             }
-            Console.WriteLine(request);
+            Console.WriteLine(message);
+            Request request = new Request(message);
+            MessageHandler messageHandler = new MessageHandler(client, request.Method, request.Command, request.Username, request.Message);
             client.Close();        
         }
-        /*
-        public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
-        {
-            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(VERSION + " " + status);
-            sb.AppendLine("Content-Type: ");
-            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
-            sb.AppendLine();
-            sb.AppendLine(message);
-            System.Diagnostics.Debug.WriteLine(sb.ToString());
-            writer.Write(sb.ToString());
-        }
-
-        public void ResponseError(string message, string status = "400", string contentType = "plain/text")
-        {
-            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(VERSION + " " + status);
-            sb.AppendLine("Content-Type: ");
-            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
-            sb.AppendLine();
-            sb.AppendLine(message);
-            System.Diagnostics.Debug.WriteLine(sb.ToString());
-            writer.Write(sb.ToString());
-        }
-        */
+   
     }
 }
 

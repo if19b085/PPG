@@ -6,45 +6,73 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
-        List<PPB.User> tournamentContestants = new List<PPB.User>();
+        public List<PPB.User> tournamentContestants = new List<PPB.User>();
       
+        //Standard Player
         PPB.User primus = new PPB.User("primus", "password", "V,V,V,V,V");
         PPB.User secundus = new PPB.User("secundus", "password", "R,R,R,R,R");
         PPB.User tertius = new PPB.User("tertius", "password", "S,P,S,P,S");
         PPB.User quartus = new PPB.User("quartus", "password", "L,P,V,V,V");
         PPB.User quintus = new PPB.User("quintus", "password", "R,S,V,V,V");
 
-        PPB.Game.Game game = new PPB.Game.Game();
+        //Enemies of primus for Round Winner with one Draw
+        PPB.User primusDraw = new PPB.User("primus", "password", "V,V,V,V,V");
+        PPB.User undeservedButWinning = new PPB.User("primus", "password", "R,R,R,R,R");
+
+
+        PPB.Game.Game game;
         [Test]
         public void ClassExists()
         {
-            Assert.IsNotNull();
+            tournamentContestants.Add(primus);
+            tournamentContestants.Add(secundus);
+            tournamentContestants.Add(tertius);
+            tournamentContestants.Add(quartus);
+            tournamentContestants.Add(quintus);
+
+            tournamentContestants.Add(primusDraw);
+            tournamentContestants.Add(undeservedButWinning);
+
+            game = new PPB.Game.Game();
+
+            Assert.IsNotNull(game);
         }
 
         [Test]
         public void OutcomeRockvsPaper()
         {
-            Assert.Pass();
+            Assert.Equals(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Paper));
         }
 
         [Test]
-        public void OutcomeLizzardvsSpock()
+        public void OutcomeLizzardvsVulcanian()
         {
-            Assert.Pass();
+            Assert.Equals(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Vulcanian));
         }
 
         [Test]
-        public void OutcomeSpockvsLizzard()
+        public void OutcomePapervsLizzard()
         {
-            Assert.Pass();
+            Assert.Equals(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Lizzard));
         }
 
         [Test]
         public void OutcomeSciccorsvsLizzard()
         {
-            Assert.Pass();
+            Assert.Equals(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Lizzard));
         }
 
+        [Test]
+        public void OutcomeDraw()
+        {
+            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Rock));
+            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Paper));
+            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Scissors));
+            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Lizzard));
+            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Vulcanian, PPB.Game.Handtype.Vulcanian));
+        }
+
+        
         [Test]
         public void RoundWinnerNoDraw()
         {
