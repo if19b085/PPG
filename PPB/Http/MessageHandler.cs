@@ -43,24 +43,24 @@ namespace PPB.Http
             switch (command)
             {
                 case "/users" :
-                    ResponseOK("User soll geadded werden.");
+                    ResponseOK("User soll geadded werden.\n");
                     break;
 
                 case "/sessions":
-                    ResponseOK("User soll eingeloggt werden.");
+                    ResponseOK("User soll eingeloggt werden.\n");
                     break;
 
                 case "/lib":
-                    ResponseOK("Musikstück soll hinzugefügt werden.");
+                    ResponseOK("Musikstück soll hinzugefügt werden.\n");
                     break;
                 case "/battles":
-                    ResponseOK("Neuer Battle wird gestartet.");
+                    ResponseOK("Neuer Battle wird gestartet.\n");
                     break;
                 case "/playlist":
-                    ResponseOK("Musikstück soll zu globaler Playlist hinzugefügt werden.");
+                    ResponseOK("Musikstück soll zu globaler Playlist hinzugefügt werden.\n");
                     break;
                 default:
-                    ResponseOK("Etwas wird noch nich behandelt.");
+                    ResponseOK("Etwas wird noch nich behandelt.\n");
                     break;
             }
 
@@ -68,30 +68,37 @@ namespace PPB.Http
 
         public void GetHandler(string command)
         {
-            switch (command)
+            if(command.Contains("/users"))
             {
-                case "/users":
-                    ResponseOK("Bio des Users wird abgefragt.");
-                    break;
-                case "/stats":
-                    ResponseOK("Stats des Users wird abgefragt.");
-                    break;
-                case "/score":
-                    ResponseOK("Score des Users wird abgefraglt.");
-                    break;
-                case "/lib":
-                    ResponseOK("Library drs Users wird abgefragt");
-                    break;
-                case "/playlist":
-                    ResponseOK("Globale playlist wird abgefragt.");
-                    break;
-                case "/actions":
-                    ResponseOK("Gesetzte Actions wird abgefragt");
-                    break;
-                default:
-                    ResponseOK("Etwas wird noch nich behandelt.");
-                    break;
+                string[] commandBlocks = command.Split("/");
+                ResponseOK("Bio des Users '" + commandBlocks[2] + "' wird abgefragt.\n");
             }
+            else
+            {
+                switch (command)
+                {
+                    case "/stats":
+                        ResponseOK("Stats des Users wird abgefragt.\n");
+                        break;
+                    case "/score":
+                        ResponseOK("Score des Users wird abgefraglt.\n");
+                        break;
+                    case "/lib":
+                        ResponseOK("Library drs Users wird abgefragt\n");
+                        break;
+                    case "/playlist":
+                        ResponseOK("Globale playlist wird abgefragt.\n");
+                        break;
+                    case "/actions":
+                        ResponseOK("Gesetzte Actions wird abgefragt\n");
+                        break;
+                    default:
+                        ResponseOK("Etwas wird noch nich behandelt.\n");
+                        break;
+                }
+
+            }
+           
 
         }
 
@@ -100,13 +107,13 @@ namespace PPB.Http
             switch (command)
             {
                 case "/users":
-                    ResponseOK("Bio des Users wird geändert.");
+                    ResponseOK("Bio des Users wird geändert.\n");
                     break;
                 case "/actions":
-                    ResponseOK("Actions des Users werden geändert.");
+                    ResponseOK("Actions des Users werden geändert.\n");
                     break;
                 case "/playlist":
-                    ResponseOK("Position eines Musikstückes soll geändert werden.");
+                    ResponseOK("Position eines Musikstückes soll geändert werden.\n");
                     break;
                 default:
                     
@@ -117,19 +124,31 @@ namespace PPB.Http
 
         public void DeleteHandler( string command)
         {
-            switch (command)
+            if (command.Contains("/lib"))
             {
-                case "/lib":
-                    ResponseOK("Musikstück soll aus lib gelöscht werden.");
-                    break;
-                default:
-                    ResponseOK("Etwas wird noch nich behandelt.");
-                    break;
+                string[] commandBlocks = command.Split("/");
+                ResponseOK("Musikstück mit Namen'" + commandBlocks[2] + "' soll gelöscht werden.\n");
             }
+            else
+            {
+                /*
+                switch (command)
+                {
+                    case "/lib":
+                        ResponseOK("Musikstück soll aus lib gelöscht werden.");
+                        break;
+                    default:
+                        ResponseOK("Etwas wird noch nich behandelt.");
+                        break;
+                }
+                */
+            }
+           
         }
 
         public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
         {
+            //Dispossed Object cannot be accssed Exception needs to be fixed /handled
             StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Server.VERSION + " " + status);

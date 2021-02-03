@@ -9,15 +9,16 @@ namespace PPBTest
         public List<PPB.User> tournamentContestants = new List<PPB.User>();
       
         //Standard Player
-        PPB.User primus = new PPB.User("primus", "password", "V,V,V,V,V");
-        PPB.User secundus = new PPB.User("secundus", "password", "R,R,R,R,R");
-        PPB.User tertius = new PPB.User("tertius", "password", "S,P,S,P,S");
-        PPB.User quartus = new PPB.User("quartus", "password", "L,P,V,V,V");
-        PPB.User quintus = new PPB.User("quintus", "password", "R,S,V,V,V");
+        PPB.User primus = new PPB.User("primus", "password", "VVVVV");
+        PPB.User secundus = new PPB.User("secundus", "password", "RRRRR");
+        PPB.User tertius = new PPB.User("tertius", "password", "SPSPS");
+        PPB.User quartus = new PPB.User("quartus", "password", "LPVVV");
+        PPB.User quintus = new PPB.User("quintus", "password", "RSVVV");
+
 
         //Enemies of primus for Round Winner with one Draw
-        PPB.User primusDraw = new PPB.User("primus", "password", "V,V,V,V,V");
-        PPB.User undeservedButWinning = new PPB.User("primus", "password", "R,R,R,R,R");
+        PPB.User primusDraw = new PPB.User("primus", "password", "VVVVV");
+        PPB.User undeservedButWinning = new PPB.User("primus", "password", "RRRRR");
 
 
         PPB.Game.Game game;
