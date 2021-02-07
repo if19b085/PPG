@@ -20,7 +20,6 @@ namespace PPB.Http
 
         private TcpListener listener;
 
-        public TcpClient client;
 
         public Server(int port)
         {
@@ -52,7 +51,7 @@ namespace PPB.Http
         {
             string message = "";
 
-            client = (TcpClient)obj;
+            TcpClient client = (TcpClient)obj;
             //message is "read from port"
             StreamReader reader = new StreamReader(client.GetStream());
             //message is stored 

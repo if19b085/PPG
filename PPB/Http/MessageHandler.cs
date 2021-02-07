@@ -15,28 +15,33 @@ namespace PPB.Http
         public string username;
         public string message;
         TcpClient client;
+        static object lockObject = new object();
         public MessageHandler(TcpClient _client, string _method, string _command, string _username, string _message)
         {
 
             message = _message;
             username = _username;
             client = _client;
-
-            switch (_method)
+            lock(lockObject)
             {
-                case "POST":
-                    PostHandler( _command);
-                    break;
-                case "PUT":
-                    PutHandler( _command);
-                    break;
-                case "GET":
-                    GetHandler( _command);
-                    break;
-                case "DELETE":
-                    DeleteHandler( _command);
-                    break;
+                switch (_method)
+                {
+                    case "POST":
+                        PostHandler(_command);
+                        break;
+                    case "PUT":
+                        PutHandler(_command);
+                        break;
+                    case "GET":
+                        GetHandler(_command);
+                        break;
+                    case "DELETE":
+                        DeleteHandler(_command);
+                        break;
+                }
+
             }
+
         }
         public void PostHandler( string command)
         {
@@ -148,16 +153,17 @@ namespace PPB.Http
 
         public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
         {
-            //Dispossed Object cannot be accssed Exception needs to be fixed /handled
-            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Server.VERSION + " " + status);
-            sb.AppendLine("Content-Type: ");
-            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
-            sb.AppendLine();
-            sb.AppendLine(message);
-            System.Diagnostics.Debug.WriteLine(sb.ToString());
-            writer.Write(sb.ToString());
+                //Dispossed Object cannot be accssed Exception needs to be fixed /handled
+                StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(Server.VERSION + " " + status);
+                sb.AppendLine("Content-Type: ");
+                sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
+                sb.AppendLine();
+                sb.AppendLine(message);
+                System.Diagnostics.Debug.WriteLine(sb.ToString());
+                writer.Write(sb.ToString());
+                writer.Close();
         }
 
         public void ResponseError(string message, string status = "400", string contentType = "plain/text")
@@ -171,7 +177,7 @@ namespace PPB.Http
             sb.AppendLine(message);
             System.Diagnostics.Debug.WriteLine(sb.ToString());
             writer.Write(sb.ToString());
+            writer.Close();
         }
-
     }
 }
