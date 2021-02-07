@@ -6,7 +6,7 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
-        public List<PPB.User> tournamentContestants = new List<PPB.User>();
+        //public List<PPB.User> tournamentContestants = new List<PPB.User>();
       
         //Standard Player
         PPB.User primus = new PPB.User("primus", "password", "VVVVV");
@@ -25,6 +25,8 @@ namespace PPBTest
         [Test]
         public void ClassExists()
         {
+            List<PPB.User> tournamentContestants = new List<PPB.User>();
+
             tournamentContestants.Add(primus);
             tournamentContestants.Add(secundus);
             tournamentContestants.Add(tertius);

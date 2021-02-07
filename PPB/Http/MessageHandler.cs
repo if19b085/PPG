@@ -109,22 +109,26 @@ namespace PPB.Http
 
         public void PutHandler(string command)
         {
-            switch (command)
+            if (command.Contains("/users"))
             {
-                case "/users":
-                    ResponseOK("Bio des Users wird geändert.\n");
-                    break;
-                case "/actions":
-                    ResponseOK("Actions des Users werden geändert.\n");
-                    break;
-                case "/playlist":
-                    ResponseOK("Position eines Musikstückes soll geändert werden.\n");
-                    break;
-                default:
-                    
-                    break;
+                string[] commandBlocks = command.Split("/");
+                ResponseOK("Bio des Users '" + commandBlocks[2] + "' soll geändert werden.\n");
             }
+            else
+            {
+                switch (command)
+                { 
+                    case "/actions":
+                        ResponseOK("Actions des Users werden geändert.\n");
+                        break;
+                    case "/playlist":
+                        ResponseOK("Position eines Musikstückes soll geändert werden.\n");
+                        break;
+                    default:
 
+                        break;
+                }
+            }
         }
 
         public void DeleteHandler( string command)
