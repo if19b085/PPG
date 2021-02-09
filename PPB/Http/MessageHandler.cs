@@ -65,7 +65,6 @@ namespace PPB.Http
                     break;
 
                 case "/sessions":
-                    
                     ParseJson(message);
                     username = jsonData.Username;
                     password = jsonData.Password;

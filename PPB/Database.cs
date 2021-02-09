@@ -29,26 +29,35 @@ namespace PPB
 
         public void AddUser(string username, string password)
         {
-            string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, admin) values(@username, @password, 0, 0, 'false');";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("password", password);
-            //Exception should nto interrupt programm
-            cmd.Prepare();
-            int n = cmd.ExecuteNonQuery();
-            connect.Close();
+            try
+            {
+                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, admin) values(@username, @password, 0, 0, 'false');";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                connect.Open();
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("password", password);
+                //Exception should nto interrupt programm
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                connect.Close();
+
+            }
+            catch(Exception)
+            {
+
+            }
+          
         }
 
         public bool Login(string username, string password)
         {
             connect.Open();
             var query = "SELECT COUNT(*) FROM public.users WHERE username= @username AND password = @password;";
-            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Parameters.AddWithValue("password", password);
             cmd.Prepare();
-            using NpgsqlDataReader reader = cmd.ExecuteReader();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
 
             int countAll = 0;
             while (reader.Read())
