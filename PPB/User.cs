@@ -17,15 +17,14 @@ namespace PPB
         //Used for playlist
         //private List<Media.MMC> library = new List<Media.MMC>();
         
-        public User(string _username, string _password,  string _handtypes)
+        public User(string _username, string _password)
         {
             username = _username;
             password = _password;
-            SetCreator(_handtypes);
         }
         //User for Game
         //gets an string like "VVRRS"
-        private void SetCreator(string handtypes)
+        public void SetCreator(string handtypes)
         {
             set = new List<Game.Handtype>();
             if (!string.IsNullOrEmpty(handtypes))

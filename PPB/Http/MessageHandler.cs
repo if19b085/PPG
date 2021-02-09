@@ -23,6 +23,8 @@ namespace PPB.Http
         public dynamic jsonData;
         //
         Database db = new Database();
+        //
+        User user;
     public MessageHandler(TcpClient _client, string _method, string _command, string _username, string _message)
         {
 
@@ -63,7 +65,19 @@ namespace PPB.Http
                     break;
 
                 case "/sessions":
-                    ResponseOK("User soll eingeloggt werden.\n");
+                    
+                    ParseJson(message);
+                    username = jsonData.Username;
+                    password = jsonData.Password;
+                    if (db.Login(username, password))
+                    {
+                        user = new User(username, password);
+                        ResponseOK("User wurde erfolgreich eingeloggt.\n");
+                    }
+                    else
+                    {
+                        ResponseError("User mit diesem Username und Password existiert nicht.");
+                    }
                     break;
 
                 case "/lib":

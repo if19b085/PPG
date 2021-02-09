@@ -8,7 +8,7 @@ namespace PPB
     class Database
     {
         public NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
-       
+       //User Related
         public void SaveUser(User user)
         {
             string query = "UPDATE public.users SET battlepoints = @battlepoints,  roundpoints = @roundpoints WHERE username = @username;)";
@@ -20,6 +20,10 @@ namespace PPB
             //Use n later for Error Handling
             int n = cmd.ExecuteNonQuery();
             connect.Close();
+        }
+
+        public void LoadUser()
+        {
 
         }
 
@@ -34,6 +38,32 @@ namespace PPB
             cmd.Prepare();
             int n = cmd.ExecuteNonQuery();
             connect.Close();
+        }
+
+        public bool Login(string username, string password)
+        {
+            connect.Open();
+            var query = "SELECT COUNT(*) FROM public.users WHERE username= @username AND password = @password;";
+            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("password", password);
+            cmd.Prepare();
+            using NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            int countAll = 0;
+            while (reader.Read())
+            {
+                countAll = reader.GetInt32(0);
+            }
+            connect.Close();
+            if (countAll == 0)
+            { 
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
