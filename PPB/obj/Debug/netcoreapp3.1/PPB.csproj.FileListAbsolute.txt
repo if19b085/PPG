@@ -2,7 +2,6 @@ C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\PPB.exe
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.csprojAssemblyReference.cache
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.AssemblyInfoInputs.cache
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.AssemblyInfo.cs
-C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.csproj.CoreCompileInputs.cache
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\PPB.deps.json
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\PPB.runtimeconfig.json
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\PPB.runtimeconfig.dev.json
@@ -29,3 +28,5 @@ C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.csproj.C
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.dll
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.pdb
 C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.genruntimeconfig.cache
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\ThomasPleiner\source\repos\PPB\PPB\obj\Debug\netcoreapp3.1\PPB.csproj.CoreCompileInputs.cache

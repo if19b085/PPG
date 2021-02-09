@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +14,16 @@ namespace PPB.Http
     {
 
         public string username;
+        public string password;
         public string message;
         TcpClient client;
+        //
         static object lockObject = new object();
-        public MessageHandler(TcpClient _client, string _method, string _command, string _username, string _message)
+        //
+        public dynamic jsonData;
+        //
+        Database db = new Database();
+    public MessageHandler(TcpClient _client, string _method, string _command, string _username, string _message)
         {
 
             message = _message;
@@ -44,11 +51,15 @@ namespace PPB.Http
 
         }
         public void PostHandler( string command)
-        {
+        { 
             switch (command)
             {
                 case "/users" :
                     ResponseOK("User soll geadded werden.\n");
+                    ParseJson(message);
+                    username = jsonData.Username;
+                    password = jsonData.Password;
+                    db.AddUser(username, password);
                     break;
 
                 case "/sessions":
@@ -154,7 +165,13 @@ namespace PPB.Http
             }
            
         }
-
+        public void ParseJson (string _string)
+        {
+            if (!string.IsNullOrEmpty(_string))
+            {
+                 jsonData = JObject.Parse(_string);
+            }
+        }
         public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
         {
                 //Dispossed Object cannot be accssed Exception needs to be fixed /handled
