@@ -14,6 +14,7 @@ namespace PPB.Http
     {
 
         public string username;
+        public string authorizationName;
         public string password;
         public string message;
         TcpClient client;
@@ -25,11 +26,11 @@ namespace PPB.Http
         Database db = new Database();
         //
         User user;
-    public MessageHandler(TcpClient _client, string _method, string _command, string _username, string _message)
+    public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
 
             message = _message;
-            username = _username;
+            authorizationName = _authorizationName;
             client = _client;
             lock(lockObject)
             {
@@ -57,11 +58,17 @@ namespace PPB.Http
             switch (command)
             {
                 case "/users" :
-                    ResponseOK("User soll geadded werden.\n");
                     ParseJson(message);
                     username = jsonData.Username;
                     password = jsonData.Password;
-                    db.AddUser(username, password);
+                    if(db.AddUser(username, password))
+                    {
+                        ResponseOK("User wurde erfolgreich hizugefügt.\n");
+                    }
+                    else
+                    {
+                        ResponseError("Es gab ein Problem beim hinzufügen des Users.");
+                    }
                     break;
 
                 case "/sessions":

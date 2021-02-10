@@ -1,41 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text;
-
+﻿
 namespace PPB.Http
 {
     public class Request
     {
-
-        public string Method, Command, Username, Message;
+        public string method, command, username, message;
        
         public Request(string _request)
         {
             if(!string.IsNullOrEmpty(_request))
             {
-                Method = GetMethodFromRequest(_request);
-                Command = GetCommandFromRequest(_request);
-                Username = GetUsernameFromAuthorization(_request);
-                Message = GetRequestMessage(_request);
-            }
+                method = GetMethodFromRequest(_request);
+                command = GetCommandFromRequest(_request);
+                username = GetUsernameFromAuthorization(_request);
+                message = GetRequestMessage(_request);
+            } 
             
-        }
-        //empty initialize to use functions
-        public Request()
+        }public string GetMethodFromRequest(string request)
         {
-
-        }
-
-
-        public string GetMethodFromRequest(string request)
-        {
-            if (string.IsNullOrEmpty(request))
-            {
-                return null;
-            }
-
             string[] lines = request.Split("\r\n");
             string[] firstline = lines[0].Split(" ");
             return firstline[0];
@@ -43,11 +24,6 @@ namespace PPB.Http
 
         public string GetCommandFromRequest(string request)
         {
-            if (string.IsNullOrEmpty(request))
-            {
-                return null;
-            }
-
             string[] lines = request.Split("\r\n");
             string[] firstline = lines[0].Split(" ");
             return firstline[1];
@@ -55,10 +31,6 @@ namespace PPB.Http
 
         public static string GetRequestMessage(string request)
         {
-            if (string.IsNullOrEmpty(request))
-            {
-                return null;
-            }
             string[] tokens = request.Split("\r\n\r\n");
             string message = tokens[1];
             return message;
@@ -78,14 +50,5 @@ namespace PPB.Http
             }
             return " ";
         }
-
-        public string GetLogEntry()
-        {
-
-            string logEntry = Method + Command + Message + " " +Username;
-            return logEntry;
-        }
-
-        
     }
 }

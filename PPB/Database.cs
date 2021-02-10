@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Npgsql;
 
 namespace PPB
@@ -27,7 +25,7 @@ namespace PPB
 
         }
 
-        public void AddUser(string username, string password)
+        public bool AddUser(string username, string password)
         {
             try
             {
@@ -40,11 +38,12 @@ namespace PPB
                 cmd.Prepare();
                 int n = cmd.ExecuteNonQuery();
                 connect.Close();
-
+                return true;
             }
             catch(Exception)
             {
-
+                connect.Close();
+                return false;
             }
           
         }
