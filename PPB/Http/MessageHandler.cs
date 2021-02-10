@@ -63,11 +63,11 @@ namespace PPB.Http
                     password = jsonData.Password;
                     if(db.AddUser(username, password))
                     {
-                        ResponseOK("User wurde erfolgreich hizugefügt.\n");
+                        ResponseOK("User wurde erfolgreich hinzugefügt.\n");
                     }
                     else
                     {
-                        ResponseError("Es gab ein Problem beim hinzufügen des Users.");
+                        ResponseError("Es gab ein Problem beim Hinzufügen des Users.\n");
                     }
                     break;
 
@@ -82,7 +82,7 @@ namespace PPB.Http
                     }
                     else
                     {
-                        ResponseError("User mit diesem Username und Password existiert nicht.");
+                        ResponseError("User mit diesem Username und Password existiert nicht.\n");
                     }
                     break;
 
@@ -107,7 +107,7 @@ namespace PPB.Http
             if(command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                ResponseOK("Bio des Users '" + commandBlocks[2] + "' wird abgefragt.\n");
+                ResponseOK(db.GetBio(commandBlocks[2]));
             }
             else
             {
@@ -143,7 +143,25 @@ namespace PPB.Http
             if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                ResponseOK("Bio des Users '" + commandBlocks[2] + "' soll geändert werden.\n");
+                if(string.Compare(commandBlocks[2], username) == 0)
+                {
+                    ParseJson(message);
+                    string publicname = jsonData.Name;
+                    string bio = jsonData.Bio;
+                    string image = jsonData.Image;
+                    if (db.ChangeBio(publicname, bio, image))
+                    {
+                        ResponseOK("Bio des Users '" + commandBlocks[2] + "' wurde geändert.\n");
+                    }
+                    else
+                    {
+                        ResponseOK("User '" + commandBlocks[2] + "' konnte nicht gefunden werden.\n");
+                    } 
+                }
+                else
+                {
+                    ResponseError("Username entspricht nicht der Authorisation");
+                }
             }
             else
             {

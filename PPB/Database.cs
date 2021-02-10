@@ -6,8 +6,9 @@ namespace PPB
     class Database
     {
         public NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
-       //User Related
-        public void SaveUser(User user)
+
+        //User Related ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        public bool SaveUser(User user)
         {
             string query = "UPDATE public.users SET battlepoints = @battlepoints,  roundpoints = @roundpoints WHERE username = @username;)";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
@@ -16,9 +17,18 @@ namespace PPB
             cmd.Parameters.AddWithValue("battlepoints", user.battlePoints);
             cmd.Parameters.AddWithValue("roundpoints", user.roundPoints);
             //Use n later for Error Handling
-            int n = cmd.ExecuteNonQuery();
-            connect.Close();
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
         }
+
 
         public void LoadUser()
         {
@@ -29,7 +39,7 @@ namespace PPB
         {
             try
             {
-                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, admin) values(@username, @password, 0, 0, 'false');";
+                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);
@@ -40,12 +50,12 @@ namespace PPB
                 connect.Close();
                 return true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 connect.Close();
                 return false;
             }
-          
+
         }
 
         public bool Login(string username, string password)
@@ -65,13 +75,54 @@ namespace PPB
             }
             connect.Close();
             if (countAll == 0)
-            { 
+            {
                 return false;
             }
             else
             {
                 return true;
             }
+        }
+
+        public bool ChangeBio(string publicname, string bio, string image)
+        {
+            string query = "UPDATE public. users SET publicname = @publicname, bio = @bio, image = @image WHERE username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("publicname", publicname);
+            cmd.Parameters.AddWithValue("bio", bio);
+            cmd.Parameters.AddWithValue("image", image);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
+
+        public string GetBio(string username)
+        {
+            string bio = "Bio zu diesem Username konnte nicht gefunden werden.";
+            connect.Open();
+            var query = "SELECT bio FROM public.users WHERE username=@username;";
+            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            using NpgsqlDataReader reader = cmd.ExecuteReader();
+            int line = 1;
+            while (reader.Read())
+            {
+                bio = reader.GetString(0);
+                line++;
+            }
+            connect.Close();
+            return bio;
         }
     }
 }
