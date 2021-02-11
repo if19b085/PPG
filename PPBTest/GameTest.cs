@@ -6,6 +6,7 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
+        /*
         //public List<PPB.User> tournamentContestants = new List<PPB.User>();
       
         //Standard Player
@@ -111,5 +112,7 @@ namespace PPBTest
         {
             Assert.Pass();
         }
+        */
     }
+
 }

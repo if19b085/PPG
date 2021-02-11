@@ -124,7 +124,7 @@ namespace PPB.Http
                         ResponseOK("Der User mit dem Namen '" + authorizationName + "' hat " + db.GetStats(authorizationName).ToString() + " Game Points.");
                         break;
                     case "/score":
-                        ResponseOK("Score des Users wird abgefragt.\n");
+                        ResponseOK(db.Scoreboard());
                         break;
                     case "/lib":
                         ResponseOK("Library drs Users wird abgefragt\n");

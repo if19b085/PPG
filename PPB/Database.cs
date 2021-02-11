@@ -3,7 +3,7 @@ using Npgsql;
 
 namespace PPB
 {
-    class Database
+    public class Database
     {
         public NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
 
@@ -133,7 +133,7 @@ namespace PPB
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Prepare();
-            using NpgsqlDataReader reader = cmd.ExecuteReader();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
             int stats = 0;
             int line = 1;
             while (reader.Read())
@@ -143,6 +143,25 @@ namespace PPB
             }
             connect.Close();
             return stats;
+        }
+
+        public string Scoreboard()
+        {
+            string scoreboard = "";
+            connect.Open();
+            var query = "SELECT publicname, gamepoints FROM users ORDER BY gamepoints DESC;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            int line = 1;
+            while (reader.Read())
+            {
+                scoreboard += "Points:\t"  + reader.GetInt32(1).ToString() +  ":\t\t " + reader.GetString(0) + " \n";
+                line++;
+            }
+            connect.Close();
+            return scoreboard;
+
         }
     }
 }
