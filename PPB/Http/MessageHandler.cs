@@ -87,7 +87,18 @@ namespace PPB.Http
                     break;
 
                 case "/lib":
-                    ResponseOK("Musikstück soll hinzugefügt werden.\n");
+                    ParseJson(message);
+                    username = jsonData.Username;
+                    string title = jsonData.Title;
+                    if (db.AddMMC(authorizationName, title))
+                    {
+                        ResponseOK("Musikstück mit dem Titel '" + title + "'wurde hinzugefügt.\n");
+                    }
+                    else
+                    {
+                        ResponseError("Musikstück mit dem Titel '" + title + "'konnte nicht hinzugefügt werden.\n");
+                    }
+                    
                     break;
                 case "/battles":
                     ResponseOK("Neuer Battle wird gestartet.\n");
@@ -127,7 +138,7 @@ namespace PPB.Http
                         ResponseOK(db.Scoreboard());
                         break;
                     case "/lib":
-                        ResponseOK("Library drs Users wird abgefragt\n");
+                        ResponseOK(db.ShowLibrary(authorizationName));
                         break;
                     case "/playlist":
                         ResponseOK("Globale playlist wird abgefragt.\n");
