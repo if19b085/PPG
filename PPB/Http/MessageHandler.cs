@@ -107,17 +107,24 @@ namespace PPB.Http
             if(command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                ResponseOK(db.GetBio(commandBlocks[2]));
+                if (string.Compare(commandBlocks[2], authorizationName) == 0)
+                {
+                    ResponseOK(db.GetBio(commandBlocks[2]));
+                }
+                else
+                {
+                    ResponseError("Username entspricht nicht der Authorisation");
+                }
             }
             else
             {
                 switch (command)
                 {
                     case "/stats":
-                        ResponseOK("Stats des Users wird abgefragt.\n");
+                        ResponseOK("Der User mit dem Namen '" + authorizationName + "' hat " + db.GetStats(authorizationName).ToString() + " Game Points.");
                         break;
                     case "/score":
-                        ResponseOK("Score des Users wird abgefraglt.\n");
+                        ResponseOK("Score des Users wird abgefragt.\n");
                         break;
                     case "/lib":
                         ResponseOK("Library drs Users wird abgefragt\n");
@@ -143,19 +150,19 @@ namespace PPB.Http
             if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                if(string.Compare(commandBlocks[2], username) == 0)
+                if(string.Compare(commandBlocks[2], authorizationName) == 0)
                 {
                     ParseJson(message);
                     string publicname = jsonData.Name;
                     string bio = jsonData.Bio;
                     string image = jsonData.Image;
-                    if (db.ChangeBio(publicname, bio, image))
+                    if (db.ChangeBio(commandBlocks[2], publicname, bio, image))
                     {
                         ResponseOK("Bio des Users '" + commandBlocks[2] + "' wurde geändert.\n");
                     }
                     else
                     {
-                        ResponseOK("User '" + commandBlocks[2] + "' konnte nicht gefunden werden.\n");
+                        ResponseError("User '" + commandBlocks[2] + "' konnte nicht gefunden werden.\n");
                     } 
                 }
                 else

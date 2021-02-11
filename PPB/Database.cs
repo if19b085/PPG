@@ -39,7 +39,7 @@ namespace PPB
         {
             try
             {
-                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false');";
+                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false', 100);";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);
@@ -84,11 +84,12 @@ namespace PPB
             }
         }
 
-        public bool ChangeBio(string publicname, string bio, string image)
+        public bool ChangeBio(string username, string publicname, string bio, string image)
         {
             string query = "UPDATE public. users SET publicname = @publicname, bio = @bio, image = @image WHERE username = @username;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
             cmd.Parameters.AddWithValue("publicname", publicname);
             cmd.Parameters.AddWithValue("bio", bio);
             cmd.Parameters.AddWithValue("image", image);
@@ -108,7 +109,7 @@ namespace PPB
 
         public string GetBio(string username)
         {
-            string bio = "Bio zu diesem Username konnte nicht gefunden werden.";
+            string bio = "";
             connect.Open();
             var query = "SELECT bio FROM public.users WHERE username=@username;";
             using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
@@ -123,6 +124,25 @@ namespace PPB
             }
             connect.Close();
             return bio;
+        }
+
+        public int GetStats(string username)
+        {
+            connect.Open();
+            var query = "SELECT gamepoints FROM public.users WHERE username=@username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            using NpgsqlDataReader reader = cmd.ExecuteReader();
+            int stats = 0;
+            int line = 1;
+            while (reader.Read())
+            {
+                stats = reader.GetInt32(0);
+                line++;
+            }
+            connect.Close();
+            return stats;
         }
     }
 }

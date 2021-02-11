@@ -61,7 +61,7 @@ namespace PPB.Http
             }
             Console.WriteLine(message);
             Request request = new Request(message);
-            MessageHandler messageHandler = new MessageHandler(client, request.Method, request.Command, request.Username, request.Message);
+            MessageHandler messageHandler = new MessageHandler(client, request.method, request.command, request.username, request.message);
             client.Close();        
         }
    
