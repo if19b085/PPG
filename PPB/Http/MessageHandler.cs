@@ -89,14 +89,14 @@ namespace PPB.Http
                 case "/lib":
                     ParseJson(message);
                     username = jsonData.Username;
-                    string title = jsonData.Title;
-                    if (db.AddMMC(authorizationName, title))
+                    string title = jsonData.Name;
+                    if (db.AddMMC(authorizationName, title) && db.AddMMCToLibrary(authorizationName, title))
                     {
-                        ResponseOK("Musikstück mit dem Titel '" + title + "'wurde hinzugefügt.\n");
+                        ResponseOK("Musikstück mit dem Titel '" + title + "' wurde hinzugefügt.\n");
                     }
                     else
                     {
-                        ResponseError("Musikstück mit dem Titel '" + title + "'konnte nicht hinzugefügt werden.\n");
+                        ResponseError("Musikstück mit dem Titel '" + title + "' konnte nicht hinzugefügt werden.\n");
                     }
                     
                     break;

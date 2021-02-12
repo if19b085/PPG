@@ -155,7 +155,7 @@ namespace PPB
             int line = 1;
             while (reader.Read())
             {
-                scoreboard += "Points:\t"  + reader.GetInt32(1).ToString() +  ":\t\t " + reader.GetString(0) + " \n";
+                scoreboard += "Points:\t" + reader.GetInt32(1).ToString() + ":\t\t " + reader.GetString(0) + " \n";
                 line++;
             }
             connect.Close();
@@ -164,40 +164,59 @@ namespace PPB
         }
 
         //MMC Related
-        public bool AddMMC(string username, string title, string artist, string genre, string length, string type, string size, string url, string rating, string album)
+        public bool AddMMC(string username, string title, string artist = "", string genre = "", string length = "", string type = "", string size = "", string url = "", string rating = "", string album = "")
         {
-            try
-            {
-                string query = "INSERT INTO public.mmc(title, artist, genre, length, type, size, url, rating, album) VALUES(@title, @artist, @genre, @length, @type, @size, @url, @rating, @album); " +
-                    "INSERT INTO public.user_mmc(username, title)VALUES("+username+","+title+"); ";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                connect.Open();
-                cmd.Parameters.AddWithValue("title", title);
-                cmd.Parameters.AddWithValue("artist", artist);
-                cmd.Parameters.AddWithValue("genre", genre);
-                cmd.Parameters.AddWithValue("lengt", length);
-                cmd.Parameters.AddWithValue("type", type);
-                cmd.Parameters.AddWithValue("size", size);
-                cmd.Parameters.AddWithValue("url", url);
-                cmd.Parameters.AddWithValue("rating", rating);
-                cmd.Parameters.AddWithValue("album", album);
-                cmd.Prepare();
-                int n = cmd.ExecuteNonQuery();
-                connect.Close();
-                return true;
-            }
-            catch (Exception)
-            {
-                connect.Close();
-                return false;
-            }
+            // try
+            // {
+            string query = "INSERT INTO public.mmc (title, artist, genre, length, type, size, url, rating, album) VALUES (@title, @artist, @genre, @length, @type, @size, @url, @rating, @album); ";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("title", title);
+            cmd.Parameters.AddWithValue("artist", artist);
+            cmd.Parameters.AddWithValue("genre", genre);
+            cmd.Parameters.AddWithValue("length", length);
+            cmd.Parameters.AddWithValue("type", type);
+            cmd.Parameters.AddWithValue("size", size);
+            cmd.Parameters.AddWithValue("url", url);
+            cmd.Parameters.AddWithValue("rating", rating);
+            cmd.Parameters.AddWithValue("album", album);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            connect.Close();
+            return true;
+            // }
+            // catch (Exception)
+            // {
+            //connect.Close();
+            //     return false;
+            //}
         }
+        public bool AddMMCToLibrary(string username, string title)
+        {
+            // try
+            // {
+            string query =  "INSERT INTO public.user_mmc (username, title) VALUES(@username, @title); ";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("title", title);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            connect.Close();
+            return true;
+            // }
+            // catch (Exception)
+            // {
+            //connect.Close();
+            //     return false;
+            //}
 
+        }
         //Library Related
         public string ShowLibrary(string username)
         {
             connect.Open();
-            var query = "SELECT username, title FROM public.user_mmc WHERE username=@username;";
+            var query = "SELECT title FROM public.user_mmc WHERE username=@username;";
             using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Prepare();
@@ -206,7 +225,7 @@ namespace PPB
             int line = 1;
             while (reader.Read())
             {
-                string oneline = line.ToString() + ". Name: " + reader.GetString(7) + " /Damage: " + reader.GetInt32(8).ToString();
+                string oneline = reader.GetString(0);
                 library += oneline + "\n";
                 line++;
             }
