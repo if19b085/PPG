@@ -17,15 +17,17 @@ namespace PPB.Http
         public string authorizationName;
         public string password;
         public string message;
-        TcpClient client;
+        private TcpClient client;
         //
-        static object lockObject = new object();
+        private static object lockObject = new object();
         //
         public dynamic jsonData;
         //
-        Database db = new Database();
+        private Database db = new Database();
         //
-        User user;
+        private User user;
+        //
+        public List<string> global = new List<string>();
     public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
 
@@ -203,23 +205,16 @@ namespace PPB.Http
             if (command.Contains("/lib"))
             {
                 string[] commandBlocks = command.Split("/");
-                ResponseOK("Musikstück mit Namen'" + commandBlocks[2] + "' soll gelöscht werden.\n");
-            }
-            else
-            {
-                /*
-                switch (command)
+                string songTitle = commandBlocks[2];
+                if (db.DeleteMMCfromLibrary(authorizationName, songTitle))
                 {
-                    case "/lib":
-                        ResponseOK("Musikstück soll aus lib gelöscht werden.");
-                        break;
-                    default:
-                        ResponseOK("Etwas wird noch nich behandelt.");
-                        break;
+                    ResponseOK("Musikstück mit Namen'" + songTitle + "' wurde gelöscht.\n");
                 }
-                */
-            }
-           
+                else
+                {
+                    ResponseError("Musikstück mit Namen'" + songTitle + "'konnte nicht gelöscht werden.\n");
+                }
+            }   
         }
         public void ParseJson (string _string)
         {

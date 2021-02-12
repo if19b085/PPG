@@ -166,8 +166,8 @@ namespace PPB
         //MMC Related
         public bool AddMMC(string username, string title, string artist = "", string genre = "", string length = "", string type = "", string size = "", string url = "", string rating = "", string album = "")
         {
-            // try
-            // {
+            try
+            {
             string query = "INSERT INTO public.mmc (title, artist, genre, length, type, size, url, rating, album) VALUES (@title, @artist, @genre, @length, @type, @size, @url, @rating, @album); ";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
@@ -184,17 +184,17 @@ namespace PPB
             int n = cmd.ExecuteNonQuery();
             connect.Close();
             return true;
-            // }
-            // catch (Exception)
-            // {
-            //connect.Close();
-            //     return false;
-            //}
+            }
+            catch (Exception)
+            {
+            connect.Close();
+                return false;
+            }
         }
         public bool AddMMCToLibrary(string username, string title)
         {
-            // try
-            // {
+            try
+            {
             string query =  "INSERT INTO public.user_mmc (username, title) VALUES(@username, @title); ";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
@@ -204,12 +204,12 @@ namespace PPB
             int n = cmd.ExecuteNonQuery();
             connect.Close();
             return true;
-            // }
-            // catch (Exception)
-            // {
-            //connect.Close();
-            //     return false;
-            //}
+            }
+            catch (Exception)
+            {
+            connect.Close();
+                 return false;
+            }
 
         }
         //Library Related
@@ -233,7 +233,35 @@ namespace PPB
             connect.Close();
 
             return library;
-
         }
+
+        public bool DeleteMMCfromLibrary(string username, string title)
+        {
+            try
+            { 
+                connect.Open();
+                var query = "DELETE  FROM public.user_mmc WHERE title=@title AND username=@username;";
+                using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                if(n == 0)
+                {
+                    throw new Exception("Deletion was not possible.");
+                }
+                connect.Close();
+                return true;
+
+            }
+            catch(Exception)
+            {
+                connect.Close();
+                return false;
+            }
+            
+        }
+
+       
     }
 }
