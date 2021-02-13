@@ -1,7 +1,7 @@
 ﻿
 namespace PPB.Game
 {
-    class Scissors:Hand
+    public class Scissors:Hand
     {
         public Scissors()
         {

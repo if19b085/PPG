@@ -220,7 +220,7 @@ namespace PPB
             using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Prepare();
-            using NpgsqlDataReader reader = cmd.ExecuteReader();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
             string library = "";
             int line = 1;
             while (reader.Read())
@@ -262,6 +262,46 @@ namespace PPB
             
         }
 
-       
+        //Global
+        public bool AddSongToGlobal(string title)
+        {
+            try
+            {
+                string query = "INSERT INTO public.global (title) VALUES( @title); ";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                connect.Open();
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                connect.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                connect.Close();
+                return false;
+            }
+
+        }
+
+        public string ShowPlaylist()
+        {
+            connect.Open();
+            var query = "SELECT title FROM public.global;";
+            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            string library = "";
+            int line = 1;
+            while (reader.Read())
+            {
+                string oneline = reader.GetString(0);
+                library += oneline + "\n";
+                line++;
+            }
+            connect.Close();
+            return library;
+        }
+
     }
 }

@@ -1,47 +1,26 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 
+
+
 namespace PPBTest
 {
     [TestFixture]
     public class GameTest
     {
-        /*
+
         //public List<PPB.User> tournamentContestants = new List<PPB.User>();
-      
-        //Standard Player
-        PPB.User primus = new PPB.User("primus", "password", "VVVVV");
-        PPB.User secundus = new PPB.User("secundus", "password", "RRRRR");
-        PPB.User tertius = new PPB.User("tertius", "password", "SPSPS");
-        PPB.User quartus = new PPB.User("quartus", "password", "LPVVV");
-        PPB.User quintus = new PPB.User("quintus", "password", "RSVVV");
+        //PPB.User primus = new PPB.User("username", "password");
+
+        PPB.Game.Game game = new PPB.Game.Game();
 
 
-        //Enemies of primus for Round Winner with one Draw
-        PPB.User primusDraw = new PPB.User("primus", "password", "VVVVV");
-        PPB.User undeservedButWinning = new PPB.User("primus", "password", "RRRRR");
-
-
-        PPB.Game.Game game;
         [Test]
         public void ClassExists()
         {
-            List<PPB.User> tournamentContestants = new List<PPB.User>();
-
-            tournamentContestants.Add(primus);
-            tournamentContestants.Add(secundus);
-            tournamentContestants.Add(tertius);
-            tournamentContestants.Add(quartus);
-            tournamentContestants.Add(quintus);
-
-            tournamentContestants.Add(primusDraw);
-            tournamentContestants.Add(undeservedButWinning);
-
-            game = new PPB.Game.Game();
-
             Assert.IsNotNull(game);
         }
-
+        /*
         [Test]
         public void OutcomeRockvsPaper()
         {
@@ -111,8 +90,8 @@ namespace PPBTest
         public void NoWinner()
         {
             Assert.Pass();
-        }
-        */
+        }*/
+        
     }
 
 }

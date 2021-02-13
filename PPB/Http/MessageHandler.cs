@@ -17,6 +17,7 @@ namespace PPB.Http
         public string authorizationName;
         public string password;
         public string message;
+        public string title;
         private TcpClient client;
         //
         private static object lockObject = new object();
@@ -26,15 +27,15 @@ namespace PPB.Http
         private Database db = new Database();
         //
         private User user;
-        //
-        public List<string> global = new List<string>();
+        
     public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
 
             message = _message;
             authorizationName = _authorizationName;
             client = _client;
-            lock(lockObject)
+
+            lock (lockObject)
             {
                 switch (_method)
                 {
@@ -91,7 +92,7 @@ namespace PPB.Http
                 case "/lib":
                     ParseJson(message);
                     username = jsonData.Username;
-                    string title = jsonData.Name;
+                    title = jsonData.Name;
                     if (db.AddMMC(authorizationName, title) && db.AddMMCToLibrary(authorizationName, title))
                     {
                         ResponseOK("Musikstück mit dem Titel '" + title + "' wurde hinzugefügt.\n");
@@ -106,7 +107,10 @@ namespace PPB.Http
                     ResponseOK("Neuer Battle wird gestartet.\n");
                     break;
                 case "/playlist":
-                    ResponseOK("Musikstück soll zu globaler Playlist hinzugefügt werden.\n");
+                    ParseJson(message);
+                    title = jsonData.Name;
+                    db.AddSongToGlobal(title);
+                    ResponseOK("Musikstück mit dem Titel '" + title + "' konnte globaler Playlist hinzugefügt werden.\n");
                     break;
                 default:
                     ResponseOK("Etwas wird noch nich behandelt.\n");
@@ -143,7 +147,7 @@ namespace PPB.Http
                         ResponseOK(db.ShowLibrary(authorizationName));
                         break;
                     case "/playlist":
-                        ResponseOK("Globale playlist wird abgefragt.\n");
+                        ResponseOK(db.ShowPlaylist());
                         break;
                     case "/actions":
                         ResponseOK("Gesetzte Actions wird abgefragt\n");

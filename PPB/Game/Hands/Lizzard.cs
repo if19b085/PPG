@@ -1,7 +1,7 @@
 ﻿
 namespace PPB.Game
 {
-    class Lizzard:Hand
+    public class Lizzard:Hand
     {
         public Lizzard()
         {

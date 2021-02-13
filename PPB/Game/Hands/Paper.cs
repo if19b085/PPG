@@ -1,7 +1,7 @@
 ﻿
 namespace PPB.Game
 {
-    class Paper:Hand
+    public class Paper:Hand
     {
         public Paper()
         {

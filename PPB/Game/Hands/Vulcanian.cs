@@ -1,7 +1,7 @@
 ﻿
 namespace PPB.Game
 {
-    class Vulcanian:Hand
+    public class Vulcanian:Hand
     {
         public Vulcanian()
         {

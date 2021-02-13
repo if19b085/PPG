@@ -1,6 +1,6 @@
 ﻿namespace PPB.Game
 {
-    class Rock:Hand
+    public class Rock:Hand
     {
         public Rock()
         {

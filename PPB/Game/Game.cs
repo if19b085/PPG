@@ -12,12 +12,13 @@ namespace PPB.Game
         public List<User> tournamentContestants;
         private int roundsPlayed = 0;
 
-        //Intialize the diffrent Hands
+        //Intialize the different Hands
         Rock rock = new Rock();
         Paper paper = new Paper();
         Scissors scissors = new Scissors();
         Lizzard lizzard = new Lizzard();
         Vulcanian vulcanian = new Vulcanian();
+       
 
         //Used to handle access to game lobby
         bool tournamentRunning = false;
@@ -27,6 +28,9 @@ namespace PPB.Game
         //Used to handle access thorugh multiple threads (=mutexes)
         static object singleHost = new object();
         static object singleAdd = new object();
+
+
+
         public List<string> Battle(User user)
         {
             //game lobby
