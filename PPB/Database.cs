@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Npgsql;
 
 namespace PPB
@@ -302,6 +303,41 @@ namespace PPB
             connect.Close();
             return library;
         }
-
+        /*NOTE: Vielleicht würde ein int mit automatischer Ordnung beim query mehr Sinn ergeben*/
+        public void Reorder(int FromPosition, int ToPosition)
+        {
+            //Get Database in Form of List
+            SortedDictionary<int, string> global = new SortedDictionary<int, string>();
+            connect.Open();
+            var query = "SELECT title FROM public.global;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            int line = 1;
+            while (reader.Read())
+            {
+                global.Add(line, reader.GetString(0));
+               
+                line++;
+            }
+            //Reorder Items in List
+            string temp = global[FromPosition];
+            global[FromPosition] = global[ToPosition];
+            global[ToPosition] = temp;
+            //Delete Entries in Database as they are
+            query = "DELETE  FROM public.global;";
+            cmd = new NpgsqlCommand(query, connect);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+            //Save List in Database
+            foreach (var song in global)
+            {
+                query = "";
+                cmd = new NpgsqlCommand(query, connect);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            connect.Close();
+        }
     }
 }

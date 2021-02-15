@@ -27,6 +27,8 @@ namespace PPB.Http
         private Database db = new Database();
         //
         private User user;
+        //Login
+        List<User> loggedInUsers = new List<User>();
         
     public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
@@ -81,6 +83,7 @@ namespace PPB.Http
                     if (db.Login(username, password))
                     {
                         user = new User(username, password);
+                        loggedInUsers.Add(user);
                         ResponseOK("User wurde erfolgreich eingeloggt.\n");
                     }
                     else
@@ -192,10 +195,16 @@ namespace PPB.Http
                 switch (command)
                 { 
                     case "/actions":
+                        //Check if User who wants handtypes changed is logged in
+                        //If logged in use SetCreator to Add Handtypes
                         ResponseOK("Actions des Users werden geändert.\n");
                         break;
                     case "/playlist":
-                        ResponseOK("Position eines Musikstückes soll geändert werden.\n");
+                        ParseJson(message);
+                        int from = jsonData.FromPosition;
+                        int to = jsonData.ToPosition;
+                        db.Reorder(from, to);
+                        ResponseOK("Position der Musikstücke wurde geändert\n");
                         break;
                     default:
 
