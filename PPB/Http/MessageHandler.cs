@@ -27,10 +27,14 @@ namespace PPB.Http
         private Database db = new Database();
         //
         private User user;
-        //Login
-        List<User> loggedInUsers = new List<User>();
-        
-    public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
+        //Dictionary makes sense beacuse i want to search for users in
+        Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
+        //
+        List<User> tournamentContestants;
+        //
+        PPB.Game.Game game;
+
+        public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
 
             message = _message;
@@ -58,15 +62,15 @@ namespace PPB.Http
             }
 
         }
-        public void PostHandler( string command)
-        { 
+        public void PostHandler(string command)
+        {
             switch (command)
             {
-                case "/users" :
+                case "/users":
                     ParseJson(message);
                     username = jsonData.Username;
                     password = jsonData.Password;
-                    if(db.AddUser(username, password))
+                    if (db.AddUser(username, password))
                     {
                         ResponseOK("User wurde erfolgreich hinzugefügt.\n");
                     }
@@ -83,7 +87,7 @@ namespace PPB.Http
                     if (db.Login(username, password))
                     {
                         user = new User(username, password);
-                        loggedInUsers.Add(user);
+                        loggedInUsers.Add(username, user);
                         ResponseOK("User wurde erfolgreich eingeloggt.\n");
                     }
                     else
@@ -104,9 +108,13 @@ namespace PPB.Http
                     {
                         ResponseError("Musikstück mit dem Titel '" + title + "' konnte nicht hinzugefügt werden.\n");
                     }
-                    
+
                     break;
                 case "/battles":
+                    //Convert Dictionary into List
+                    tournamentContestants = loggedInUsers.Values.ToList();
+                    //STart Game with List of logged In Users
+                    game = new Game.Game(tournamentContestants);
                     ResponseOK("Neuer Battle wird gestartet.\n");
                     break;
                 case "/playlist":
@@ -124,7 +132,7 @@ namespace PPB.Http
 
         public void GetHandler(string command)
         {
-            if(command.Contains("/users"))
+            if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
                 if (string.Compare(commandBlocks[2], authorizationName) == 0)
@@ -161,7 +169,7 @@ namespace PPB.Http
                 }
 
             }
-           
+
 
         }
 
@@ -170,7 +178,7 @@ namespace PPB.Http
             if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                if(string.Compare(commandBlocks[2], authorizationName) == 0)
+                if (string.Compare(commandBlocks[2], authorizationName) == 0)
                 {
                     ParseJson(message);
                     string publicname = jsonData.Name;
@@ -183,7 +191,7 @@ namespace PPB.Http
                     else
                     {
                         ResponseError("User '" + commandBlocks[2] + "' konnte nicht gefunden werden.\n");
-                    } 
+                    }
                 }
                 else
                 {
@@ -193,11 +201,21 @@ namespace PPB.Http
             else
             {
                 switch (command)
-                { 
+                {
                     case "/actions":
+                        ParseJson(message);
+                        string handtypes = jsonData.actions;
                         //Check if User who wants handtypes changed is logged in
-                        //If logged in use SetCreator to Add Handtypes
-                        ResponseOK("Actions des Users werden geändert.\n");
+                        if (loggedInUsers.ContainsKey(authorizationName))
+                        {
+                            //If logged in use SetCreator to Add Handtypes
+                            loggedInUsers[authorizationName].SetCreator(handtypes);
+                            ResponseOK("Actions des Users wuden geändert.\n");
+                        }
+                        else
+                        {
+                            ResponseError("User mit dem Namen " + authorizationName + " ist nicht eingeloggt.");
+                        }
                         break;
                     case "/playlist":
                         ParseJson(message);
@@ -213,7 +231,7 @@ namespace PPB.Http
             }
         }
 
-        public void DeleteHandler( string command)
+        public void DeleteHandler(string command)
         {
             if (command.Contains("/lib"))
             {
@@ -227,28 +245,28 @@ namespace PPB.Http
                 {
                     ResponseError("Musikstück mit Namen'" + songTitle + "'konnte nicht gelöscht werden.\n");
                 }
-            }   
+            }
         }
-        public void ParseJson (string _string)
+        public void ParseJson(string _string)
         {
             if (!string.IsNullOrEmpty(_string))
             {
-                 jsonData = JObject.Parse(_string);
+                jsonData = JObject.Parse(_string);
             }
         }
         public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
         {
-                //Dispossed Object cannot be accssed Exception needs to be fixed /handled
-                StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine(Server.VERSION + " " + status);
-                sb.AppendLine("Content-Type: ");
-                sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
-                sb.AppendLine();
-                sb.AppendLine(message);
-                System.Diagnostics.Debug.WriteLine(sb.ToString());
-                writer.Write(sb.ToString());
-                writer.Close();
+            //Dispossed Object cannot be accssed Exception needs to be fixed /handled
+            StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(Server.VERSION + " " + status);
+            sb.AppendLine("Content-Type: ");
+            sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
+            sb.AppendLine();
+            sb.AppendLine(message);
+            System.Diagnostics.Debug.WriteLine(sb.ToString());
+            writer.Write(sb.ToString());
+            writer.Close();
         }
 
         public void ResponseError(string message, string status = "400", string contentType = "plain/text")

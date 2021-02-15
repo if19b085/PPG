@@ -320,6 +320,8 @@ namespace PPB
                
                 line++;
             }
+            connect.Close();
+            connect.Open();
             //Reorder Items in List
             string temp = global[FromPosition];
             global[FromPosition] = global[ToPosition];
@@ -329,15 +331,17 @@ namespace PPB
             cmd = new NpgsqlCommand(query, connect);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
+            connect.Close();
             //Save List in Database
             foreach (var song in global)
             {
-                query = "";
+                connect.Open();
+                query = "INSERT INTO public.global(title) VALUES('"+song.Value+"');";
                 cmd = new NpgsqlCommand(query, connect);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
+                connect.Close();
             }
-            connect.Close();
         }
     }
 }

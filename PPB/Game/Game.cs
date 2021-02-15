@@ -29,7 +29,10 @@ namespace PPB.Game
         static object singleHost = new object();
         static object singleAdd = new object();
 
-
+        public Game(List<User> _tournamentContestants)
+        {
+            tournamentContestants = _tournamentContestants;
+        }
 
         public List<string> Battle(User user)
         {
