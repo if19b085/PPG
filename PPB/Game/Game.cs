@@ -29,11 +29,13 @@ namespace PPB.Game
         static object singleHost = new object();
         static object singleAdd = new object();
 
+        //
+        private Database db = new Database();
         public Game()
         { 
         }
 
-        public List<string> Battle(User user)
+        public List<string> Battle(string username)
         {
             //game lobby
             lock(singleHost)
@@ -58,7 +60,9 @@ namespace PPB.Game
             if (hostPlayer == true)
             {
                 //Log who hosted the game.
-                gameLog.Add(user.username + " has started a new game.\n");
+                gameLog.Add(username + " has started a new game.\n");
+                //Create User with Username
+                User user = new User(username, db.GetActions(username));
                 tournamentContestants.Add(user);
                 Thread.Sleep(15000);
                 tournamentRunning = true;
@@ -103,9 +107,11 @@ namespace PPB.Game
             {
                 lock (singleAdd)
                 {
+                    //Create User with Username
+                    User user = new User(username, db.GetActions(username));
                     tournamentContestants.Add(user);
                     //Log who joined the game
-                    gameLog.Add(user.username + " joined the game.\n");
+                    gameLog.Add(username + " joined the game.\n");
                 }
                 //Player who are not the host go to sleep and wait till its over
                 while (tournamentOver == false)

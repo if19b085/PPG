@@ -7,26 +7,24 @@ namespace PPB
     public class User
     {
         public string username;
-        public string password;
         //private int score;
-        private bool admin;
+        public bool admin = false;
         //Used for playing
-        public List<Game.Handtype> set;
+        public Game.Handtype[] set = new Game.Handtype[5];
         public int battlePoints;
         public int roundPoints;
         //Used for playlist
         //private List<Media.MMC> library = new List<Media.MMC>();
         
-        public User(string _username, string _password)
+        public User(string _username, string handtypes)
         {
             username = _username;
-            password = _password;
+            SetCreator(handtypes);
         }
         //User for Game
         //gets an string like "VVRRS"
         public void SetCreator(string handtypes)
         {
-            set = new List<Game.Handtype>();
             if (!string.IsNullOrEmpty(handtypes))
             {  
                 if(handtypes.Length == 5)

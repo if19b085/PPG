@@ -26,10 +26,6 @@ namespace PPB.Http
         //
         private Database db = new Database();
         //
-        private User user;
-        //Dictionary makes sense beacuse i want to search for users in
-        Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
-        //
         List<string> gameLogList = new List<string>();
         string gameLog = "";
         //
@@ -86,9 +82,7 @@ namespace PPB.Http
                     username = jsonData.Username;
                     password = jsonData.Password;
                     if (db.Login(username, password))
-                    {
-                        user = new User(username, password);
-                        loggedInUsers.Add(username, user);
+                    { 
                         ResponseOK("User wurde erfolgreich eingeloggt.\n");
                     }
                     else
@@ -113,7 +107,7 @@ namespace PPB.Http
                     break;
                 case "/battles":
 
-                    gameLogList = game.Battle(loggedInUsers[authorizationName]);
+                    gameLogList = game.Battle(authorizationName);
                     foreach (var line in gameLogList)
                     {
                         gameLog += line;
