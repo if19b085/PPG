@@ -30,9 +30,10 @@ namespace PPB.Http
         //Dictionary makes sense beacuse i want to search for users in
         Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
         //
-        List<User> tournamentContestants;
+        List<string> gameLogList = new List<string>();
+        string gameLog = "";
         //
-        PPB.Game.Game game;
+        PPB.Game.Game game = new Game.Game();
 
         public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
@@ -111,11 +112,15 @@ namespace PPB.Http
 
                     break;
                 case "/battles":
-                    //Convert Dictionary into List
-                    tournamentContestants = loggedInUsers.Values.ToList();
-                    //STart Game with List of logged In Users
-                    game = new Game.Game(tournamentContestants);
-                    ResponseOK("Neuer Battle wird gestartet.\n");
+
+                    gameLogList = game.Battle(loggedInUsers[authorizationName]);
+                    foreach (var line in gameLogList)
+                    {
+                        gameLog += line;
+
+                    }
+                    ResponseOK(gameLog);
+
                     break;
                 case "/playlist":
                     ParseJson(message);
@@ -161,10 +166,10 @@ namespace PPB.Http
                         ResponseOK(db.ShowPlaylist());
                         break;
                     case "/actions":
-                        ResponseOK("Gesetzte Actions wird abgefragt\n");
+                        ResponseOK(db.GetActions(authorizationName));
                         break;
                     default:
-                        ResponseOK("Etwas wird noch nich behandelt.\n");
+                        ResponseOK("Etwas wird noch nicht behandelt.\n");
                         break;
                 }
 
@@ -205,16 +210,13 @@ namespace PPB.Http
                     case "/actions":
                         ParseJson(message);
                         string handtypes = jsonData.actions;
-                        //Check if User who wants handtypes changed is logged in
-                        if (loggedInUsers.ContainsKey(authorizationName))
+                        if(db.ChangeAction(authorizationName, handtypes))
                         {
-                            //If logged in use SetCreator to Add Handtypes
-                            loggedInUsers[authorizationName].SetCreator(handtypes);
-                            ResponseOK("Actions des Users wuden geändert.\n");
+                            ResponseOK("Actions des Users "+authorizationName+" wuden geändert.\n");
                         }
                         else
                         {
-                            ResponseError("User mit dem Namen " + authorizationName + " ist nicht eingeloggt.");
+                            ResponseError("Actions des Users " + authorizationName + " konnten nicht geändert werden.");
                         }
                         break;
                     case "/playlist":

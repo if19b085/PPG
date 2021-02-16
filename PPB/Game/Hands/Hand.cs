@@ -4,8 +4,8 @@ namespace PPB.Game
     public class Hand
     {
         //Stores the specific handtype
-        protected Handtype handtype;
+        public Handtype handtype;
         //stores the outcome against other hands
-        public Outcome[] outcomes;
+        public Outcome[] outcomes = new Outcome[5];
     }
 }

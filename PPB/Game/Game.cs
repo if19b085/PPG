@@ -9,7 +9,7 @@ namespace PPB.Game
     public class Game
     {
         public List<string> gameLog = new List<string>();
-        public List<User> tournamentContestants;
+        public List<User> tournamentContestants = new List<User>();
         private int roundsPlayed = 0;
 
         //Intialize the different Hands
@@ -29,9 +29,8 @@ namespace PPB.Game
         static object singleHost = new object();
         static object singleAdd = new object();
 
-        public Game(List<User> _tournamentContestants)
-        {
-            tournamentContestants = _tournamentContestants;
+        public Game()
+        { 
         }
 
         public List<string> Battle(User user)

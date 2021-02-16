@@ -8,39 +8,12 @@ namespace PPB
     {
         public NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
 
-        //User Related ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public bool SaveUser(User user)
-        {
-            string query = "UPDATE public.users SET battlepoints = @battlepoints,  roundpoints = @roundpoints WHERE username = @username;)";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", user.username);
-            cmd.Parameters.AddWithValue("battlepoints", user.battlePoints);
-            cmd.Parameters.AddWithValue("roundpoints", user.roundPoints);
-            //Use n later for Error Handling
-            if (cmd.ExecuteNonQuery() == 1)
-            {
-                connect.Close();
-                return true;
-            }
-            else
-            {
-                connect.Close();
-                return false;
-            }
-        }
-
-
-        public void LoadUser()
-        {
-
-        }
-
+        
         public bool AddUser(string username, string password)
         {
             try
             {
-                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false', 100);";
+                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false', 100, 'SSSSS');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);
@@ -145,6 +118,45 @@ namespace PPB
             return stats;
         }
 
+        public string GetActions(string username)
+        {
+            connect.Open();
+            var query = "SELECT handtypes FROM public.users WHERE username=@username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            string handtypes = "";
+            int line = 1;
+            while (reader.Read())
+            {
+                handtypes = reader.GetString(0);
+                line++;
+            }
+            connect.Close();
+            return handtypes;
+        }
+
+        public bool ChangeAction(string username, string handtypes)
+        {
+            string query = "UPDATE public. users SET handtypes = @handtypes;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("handtypes", handtypes);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
         public string Scoreboard()
         {
             string scoreboard = "";

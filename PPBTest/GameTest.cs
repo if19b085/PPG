@@ -8,18 +8,16 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
-
-        //public List<PPB.User> tournamentContestants = new List<PPB.User>();
-        //PPB.User primus = new PPB.User("username", "password");
-
-        PPB.Game.Game game = new PPB.Game.Game();
-
+        PPB.User primus = new PPB.User("username", "password");
+        
 
         [Test]
         public void ClassExists()
         {
-            Assert.IsNotNull(game);
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.IsNotNull(primus);
         }
+
         /*
         [Test]
         public void OutcomeRockvsPaper()
