@@ -157,6 +157,11 @@ namespace PPB
                 return false;
             }
         }
+
+        public void GiveAdministrator()
+        {
+
+        }
         public string Scoreboard()
         {
             string scoreboard = "";

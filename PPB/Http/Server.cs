@@ -20,7 +20,17 @@ namespace PPB.Http
 
         private TcpListener listener;
 
-
+        MessageHandler handleyMcHandFace = new MessageHandler();
+        //
+        private Database db = new Database();
+        //
+        //
+        List<string> gameLogList = new List<string>();
+        string gameLog = "";
+        //
+        bool host = true;
+        //
+        private static object singleHost = new object();
         public Server(int port)
         {
             listener = new TcpListener(IPAddress.Any, port);
@@ -61,10 +71,63 @@ namespace PPB.Http
             }
             Console.WriteLine(message);
             Request request = new Request(message);
-            MessageHandler messageHandler = new MessageHandler(client, request.method, request.command, request.username, request.message);
+            if(request.command.Contains("/battles"))
+            {
+                User user = new User(request.username, db.GetActions(request.username));
+                string responseGameLog = BattleArrange(user);
+                handleyMcHandFace.ResponseOK(responseGameLog);
+            }
+            else
+            {
+             MessageHandler messageHandler = new MessageHandler(client, request.method, request.command, request.username, request.message);
+
+            }
             client.Close();        
         }
-   
+        public string BattleArrange(User user)
+        {
+            List<User> tournamentContestants = new List<User>();
+            bool gameOver = false;
+
+            lock (singleHost)
+            {
+                if (host)
+                {
+                    host = false;
+                    tournamentContestants.Add(user);
+                    user.gameStarter = true;
+                }
+                else
+                {
+                    tournamentContestants.Add(user);
+                }
+            }
+
+            if (user.gameStarter)
+            {
+                Game.Game game = new Game.Game();
+                Thread.Sleep(15000);
+                game.tournamentContestants = tournamentContestants;
+                gameLogList = game.Battle();
+                gameOver = true;
+
+                foreach (var line in gameLogList)
+                {
+                    gameLog += line;
+
+                }
+            }
+            else
+            {
+
+                while (!gameOver)
+                {
+                    Thread.Sleep(3000);
+                }
+            }
+
+            return gameLog;
+        }
     }
 }
 

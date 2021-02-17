@@ -19,18 +19,16 @@ namespace PPB.Http
         public string message;
         public string title;
         private TcpClient client;
-        //
-        private static object lockObject = new object();
+        
         //
         public dynamic jsonData;
         //
         private Database db = new Database();
-        //
-        List<string> gameLogList = new List<string>();
-        string gameLog = "";
-        //
-        PPB.Game.Game game = new Game.Game();
+       
+        public MessageHandler()
+        {
 
+        }
         public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
 
@@ -38,26 +36,21 @@ namespace PPB.Http
             authorizationName = _authorizationName;
             client = _client;
 
-            lock (lockObject)
+            switch (_method)
             {
-                switch (_method)
-                {
-                    case "POST":
-                        PostHandler(_command);
-                        break;
-                    case "PUT":
-                        PutHandler(_command);
-                        break;
-                    case "GET":
-                        GetHandler(_command);
-                        break;
-                    case "DELETE":
-                        DeleteHandler(_command);
-                        break;
-                }
-
+                case "POST":
+                    PostHandler(_command);
+                    break;
+                case "PUT":
+                    PutHandler(_command);
+                    break;
+                case "GET":
+                    GetHandler(_command);
+                    break;
+                case "DELETE":
+                    DeleteHandler(_command);
+                    break;
             }
-
         }
         public void PostHandler(string command)
         {
@@ -82,7 +75,7 @@ namespace PPB.Http
                     username = jsonData.Username;
                     password = jsonData.Password;
                     if (db.Login(username, password))
-                    { 
+                    {
                         ResponseOK("User wurde erfolgreich eingeloggt.\n");
                     }
                     else
@@ -103,17 +96,6 @@ namespace PPB.Http
                     {
                         ResponseError("Musikstück mit dem Titel '" + title + "' konnte nicht hinzugefügt werden.\n");
                     }
-
-                    break;
-                case "/battles":
-
-                    gameLogList = game.Battle(authorizationName);
-                    foreach (var line in gameLogList)
-                    {
-                        gameLog += line;
-
-                    }
-                    ResponseOK(gameLog);
 
                     break;
                 case "/playlist":
@@ -204,9 +186,9 @@ namespace PPB.Http
                     case "/actions":
                         ParseJson(message);
                         string handtypes = jsonData.actions;
-                        if(db.ChangeAction(authorizationName, handtypes))
+                        if (db.ChangeAction(authorizationName, handtypes))
                         {
-                            ResponseOK("Actions des Users "+authorizationName+" wuden geändert.\n");
+                            ResponseOK("Actions des Users " + authorizationName + " wuden geändert.\n");
                         }
                         else
                         {
@@ -278,5 +260,7 @@ namespace PPB.Http
             writer.Write(sb.ToString());
             writer.Close();
         }
+
+       
     }
 }

@@ -7,14 +7,14 @@ namespace PPB
     public class User
     {
         public string username;
-        //private int score;
-        public bool admin = false;
+      
         //Used for playing
         public Game.Handtype[] set = new Game.Handtype[5];
         public int battlePoints;
         public int roundPoints;
-        //Used for playlist
-        //private List<Media.MMC> library = new List<Media.MMC>();
+        public bool gameStarter = false;
+        //
+        Database db = new Database();
         
         public User(string _username, string handtypes)
         {
@@ -75,7 +75,7 @@ namespace PPB
         }
         public void GiveAdministrator()
         {
-            admin = true;
+            db.GiveAdministrator();
         }
     }
 }
