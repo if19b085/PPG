@@ -61,6 +61,11 @@ namespace PPB.Game
                             gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed] + " won against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed] + "\n");
 
                         }
+                        else
+                        {
+                            gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed] + " played a draw  against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed] + "\n");
+
+                        }
                     }
                 }
                 roundsPlayed++;
@@ -97,42 +102,59 @@ namespace PPB.Game
         }
         public void FindRoundWinner(List<User> players, int roundsPlayed)
         {
-            for (int i = 0; i < tournamentContestants.Count; i++)
+            for (int i = 0; i < (tournamentContestants.Count -1) ; i++)
             {
-                //Check if the first player in sorted list is really the winner or ties
-                if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints && i == 0)
+                if (i == 0)
                 {
-                    tournamentContestants[i].RoundWon();
-                    //Log who won th round
-                    gameLog.Add(tournamentContestants[i].username + "won Round " + roundsPlayed + 1 + "\n");
+                    //Check if the first player in sorted list is really the winner or ties
+                    if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints)
+                    {
+                        tournamentContestants[i].RoundWon();
+                        //Log who won th round
+                        gameLog.Add(tournamentContestants[i].username + "won Round " + roundsPlayed + 1 + "\n");
+                    }
 
-                }//Now that we have a predecessor we can check normally for the winner
+                }
+                //Now that we have a predecessor we can check normally for the winner
                 else if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints && tournamentContestants[i].battlePoints != tournamentContestants[i - 1].battlePoints)
                 {
                     tournamentContestants[i].RoundWon();
                     //Log who won the round
                     gameLog.Add(tournamentContestants[i].username + "won Round " + roundsPlayed + 1 + "\n");
                 }
+                else
+                {
+                   gameLog.Add("No Winner in Round " + roundsPlayed + 1 + "\n");
+                }
             }
         }
 
         public void FindWinner(List<User> players)
         {
-            for (int i = 0; i < tournamentContestants.Count; i++)
+            for (int i = 0; i < (tournamentContestants.Count-1); i++)
             {
-                //Check if the first player in sorted list is really the winner or ties
-                if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && i == 0)
+                if (i == 0)
                 {
-                    tournamentContestants[i].GiveAdministrator();
-                    //Log who won the game
-                    gameLog.Add(tournamentContestants[i].username + "won the game \n");
+                    //Check if the first player in sorted list is really the winner or ties
+                    if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && i == 0)
+                    {
+                        tournamentContestants[i].GiveAdministrator();
+                        //Log who won the game
+                        gameLog.Add(tournamentContestants[i].username + "won the game \n");
 
-                }//Now that we have a predecessor we can check normally for the winner
+                    }
+
+                }
+                //Now that we have a predecessor we can check normally for the winner
                 else if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && tournamentContestants[i].roundPoints != tournamentContestants[i - 1].roundPoints)
                 {
                     tournamentContestants[i].GiveAdministrator();
                     //Log who won the game
                     gameLog.Add(tournamentContestants[i].username + "won the game \n");
+                }
+                else
+                {
+                    gameLog.Add("No winner in this  game. \n");
                 }
             }
         }

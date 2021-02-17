@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -20,8 +20,6 @@ namespace PPB.Http
 
         private TcpListener listener;
 
-        MessageHandler handleyMcHandFace = new MessageHandler();
-        //
         private Database db = new Database();
         //
         //
@@ -31,6 +29,8 @@ namespace PPB.Http
         bool host = true;
         //
         private static object singleHost = new object();
+        //
+        private List<User> tournamentContestants = new List<User>();
         public Server(int port)
         {
             listener = new TcpListener(IPAddress.Any, port);
@@ -56,7 +56,7 @@ namespace PPB.Http
             running = false;
             listener.Stop();
         }
-       
+
         private void HandleClient(Object obj)
         {
             string message = "";
@@ -71,22 +71,28 @@ namespace PPB.Http
             }
             Console.WriteLine(message);
             Request request = new Request(message);
-            if(request.command.Contains("/battles"))
+            MessageHandler messageHandler = new MessageHandler(client, request.method, request.command, request.username, request.message);
+            if (request.command.Contains("/battles"))
             {
-                User user = new User(request.username, db.GetActions(request.username));
+                string handtypes = "";
+                lock (singleHost)
+                {
+                    handtypes= db.GetActions(request.username);
+                }
+                User user = new User(request.username, handtypes);
                 string responseGameLog = BattleArrange(user);
-                handleyMcHandFace.ResponseOK(responseGameLog);
+                messageHandler.ResponseOK(responseGameLog);
+
             }
             else
             {
-             MessageHandler messageHandler = new MessageHandler(client, request.method, request.command, request.username, request.message);
+                messageHandler.Go();
 
             }
-            client.Close();        
+            client.Close();
         }
         public string BattleArrange(User user)
         {
-            List<User> tournamentContestants = new List<User>();
             bool gameOver = false;
 
             lock (singleHost)

@@ -19,38 +19,39 @@ namespace PPB.Http
         public string message;
         public string title;
         private TcpClient client;
+        public string command;
+        public string method;
         
         //
         public dynamic jsonData;
         //
         private Database db = new Database();
        
-        public MessageHandler()
+        public void Go()
         {
-
+            switch (method)
+            {
+                case "POST":
+                    PostHandler(command);
+                    break;
+                case "PUT":
+                    PutHandler(command);
+                    break;
+                case "GET":
+                    GetHandler(command);
+                    break;
+                case "DELETE":
+                    DeleteHandler(command);
+                    break;
+            }
         }
         public MessageHandler(TcpClient _client, string _method, string _command, string _authorizationName, string _message)
         {
-
             message = _message;
             authorizationName = _authorizationName;
             client = _client;
-
-            switch (_method)
-            {
-                case "POST":
-                    PostHandler(_command);
-                    break;
-                case "PUT":
-                    PutHandler(_command);
-                    break;
-                case "GET":
-                    GetHandler(_command);
-                    break;
-                case "DELETE":
-                    DeleteHandler(_command);
-                    break;
-            }
+            method = _method;
+            command = _command;
         }
         public void PostHandler(string command)
         {
