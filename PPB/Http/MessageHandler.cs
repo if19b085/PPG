@@ -21,12 +21,12 @@ namespace PPB.Http
         private TcpClient client;
         public string command;
         public string method;
-        
+
         //
         public dynamic jsonData;
         //
         private Database db = new Database();
-       
+
         public void Go()
         {
             switch (method)
@@ -187,7 +187,7 @@ namespace PPB.Http
                     case "/actions":
                         ParseJson(message);
                         string handtypes = jsonData.actions;
-                        if (db.ChangeAction(authorizationName, handtypes))
+                        if (ValidHandtype(handtypes) && db.ChangeAction(authorizationName, handtypes))
                         {
                             ResponseOK("Actions des Users " + authorizationName + " wuden geändert.\n");
                         }
@@ -262,6 +262,44 @@ namespace PPB.Http
             writer.Close();
         }
 
-       
+        public bool ValidHandtype(string handtypes)
+        {
+            if (!string.IsNullOrEmpty(handtypes))
+            {
+                if (handtypes.Length == 5)
+                {
+                    for (int i = 0; i < handtypes.Length; i++)
+                    {
+                        switch (handtypes[i])
+                        {
+                            case 'R':
+
+                                break;
+                            case 'P':
+                                break;
+                            case 'S':
+                                break;
+                            case 'L':
+                                break;
+                            case 'V':
+                                break;
+                            default:
+                                return false;
+                        }
+                    }
+
+                }
+                else
+                {
+                    return false; ;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

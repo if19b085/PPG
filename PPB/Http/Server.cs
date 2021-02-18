@@ -94,6 +94,8 @@ namespace PPB.Http
         public string BattleArrange(User user)
         {
             bool gameOver = false;
+            gameLog = "";
+            gameLogList.Clear();
 
             lock (singleHost)
             {
@@ -115,20 +117,22 @@ namespace PPB.Http
                 Thread.Sleep(15000);
                 game.tournamentContestants = tournamentContestants;
                 gameLogList = game.Battle();
-                gameOver = true;
+                
 
                 foreach (var line in gameLogList)
                 {
                     gameLog += line;
 
                 }
+                game.tournamentContestants.Clear();
+                tournamentContestants.Clear();
+                gameOver = true;
             }
             else
             {
-
                 while (!gameOver)
                 {
-                    Thread.Sleep(3000);
+                    Thread.Sleep(1500);
                 }
             }
 
