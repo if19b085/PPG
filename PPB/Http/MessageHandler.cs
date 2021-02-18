@@ -119,11 +119,11 @@ namespace PPB.Http
                 string[] commandBlocks = command.Split("/");
                 if (string.Compare(commandBlocks[2], authorizationName) == 0)
                 {
-                    ResponseOK(db.GetBio(commandBlocks[2]));
+                    ResponseOK(db.GetBio(commandBlocks[2]) + "\n");
                 }
                 else
                 {
-                    ResponseError("Username entspricht nicht der Authorisation");
+                    ResponseError("Username entspricht nicht der Authorisation" + "\n");
                 }
             }
             else
@@ -134,16 +134,16 @@ namespace PPB.Http
                         ResponseOK("Der User mit dem Namen '" + authorizationName + "' hat " + db.GetStats(authorizationName).ToString() + " Game Points.");
                         break;
                     case "/score":
-                        ResponseOK(db.Scoreboard());
+                        ResponseOK(db.Scoreboard() + "\n");
                         break;
                     case "/lib":
-                        ResponseOK(db.ShowLibrary(authorizationName));
+                        ResponseOK(db.ShowLibrary(authorizationName) + "\n");
                         break;
                     case "/playlist":
-                        ResponseOK(db.ShowPlaylist());
+                        ResponseOK(db.ShowPlaylist() + "\n");
                         break;
                     case "/actions":
-                        ResponseOK(db.GetActions(authorizationName));
+                        ResponseOK(db.GetActions(authorizationName) + "\n");
                         break;
                     default:
                         ResponseOK("Etwas wird noch nicht behandelt.\n");
@@ -193,7 +193,7 @@ namespace PPB.Http
                         }
                         else
                         {
-                            ResponseError("Actions des Users " + authorizationName + " konnten nicht geändert werden.");
+                            ResponseError("Actions des Users " + authorizationName + " konnten nicht geändert werden.\n");
                         }
                         break;
                     case "/playlist":

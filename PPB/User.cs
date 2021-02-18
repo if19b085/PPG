@@ -25,41 +25,50 @@ namespace PPB
         //gets an string like "VVRRS"
         public void SetCreator(string handtypes)
         {
-            if (!string.IsNullOrEmpty(handtypes))
-            {  
-                if(handtypes.Length == 5)
+            try
+            {
+                if (!string.IsNullOrEmpty(handtypes))
                 {
-                    for (int i = 0; i < handtypes.Length; i++)
+                    if (handtypes.Length == 5)
                     {
-                        switch (handtypes[i])
+                        for (int i = 0; i < handtypes.Length; i++)
                         {
-                            case 'R':
-                                set[i] = Game.Handtype.Rock;
-                                break;
-                            case 'P':
-                                set[i] = Game.Handtype.Paper;
-                                break;
-                            case 'S':
-                                set[i] = Game.Handtype.Scissors;
-                                break;
-                            case 'L':
-                                set[i] = Game.Handtype.Lizzard;
-                                break;
-                            case 'V':
-                                set[i] = Game.Handtype.Vulcanian;
-                                break;
-                            default:
-                                //Give some feedback that a wrong handtype was entered
-                                throw new InvalidOperationException("Wrong handtype entered at position: " + i);
+                            switch (handtypes[i])
+                            {
+                                case 'R':
+                                    set[i] = Game.Handtype.Rock;
+                                    break;
+                                case 'P':
+                                    set[i] = Game.Handtype.Paper;
+                                    break;
+                                case 'S':
+                                    set[i] = Game.Handtype.Scissors;
+                                    break;
+                                case 'L':
+                                    set[i] = Game.Handtype.Lizzard;
+                                    break;
+                                case 'V':
+                                    set[i] = Game.Handtype.Vulcanian;
+                                    break;
+                                default:
+                                    //Give some feedback that a wrong handtype was entered
+                                    throw new InvalidOperationException("Wrong handtype entered at position: " + i);
+                            }
                         }
+
+                    }
+                    else
+                    {
+                        //Give some feedback that a wrong amount of handtypes was entered if != 5
+                        throw new InvalidOperationException("Wrong amount of handtype entered.");
                     }
 
                 }
-                else
-                {
-                    //Give some feedback that a wrong amount of handtypes was entered if != 5
-                    throw new InvalidOperationException("Wrong amount of handtype entered.");
-                }
+           
+
+            }
+            catch(Exception)
+            {
 
             }
         }
@@ -75,7 +84,8 @@ namespace PPB
         }
         public void GiveAdministrator()
         {
-            db.GiveAdministrator();
+            db.GiveAdministrator(username);
+            db.GainPoints(username);
         }
     }
 }

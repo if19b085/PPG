@@ -139,7 +139,7 @@ namespace PPB
 
         public bool ChangeAction(string username, string handtypes)
         {
-            string query = "UPDATE public. users SET handtypes = @handtypes;";
+            string query = "UPDATE public.users SET handtypes = @handtypes WHERE username = @username;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
             cmd.Parameters.AddWithValue("username", username);
@@ -158,9 +158,61 @@ namespace PPB
             }
         }
 
-        public void GiveAdministrator()
+        public bool GiveAdministrator(string username)
         {
+            string query = "UPDATE public.users SET admin = 'true' WHERE username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
 
+        public bool GainPoints(string username)
+        {
+            string query = "UPDATE public.users SET gamepoints = gamepoints + 1  WHERE username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
+        public void TakeAdministrator()
+        {
+            string query = "UPDATE public.users SET admin = 'false';";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+            }
+            else
+            {
+                connect.Close();
+            }
+           
         }
         public string Scoreboard()
         {
