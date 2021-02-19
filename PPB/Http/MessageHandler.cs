@@ -197,11 +197,19 @@ namespace PPB.Http
                         }
                         break;
                     case "/playlist":
-                        ParseJson(message);
-                        int from = jsonData.FromPosition;
-                        int to = jsonData.ToPosition;
-                        db.Reorder(from, to);
-                        ResponseOK("Position der Musikstücke wurde geändert\n");
+                        if(db.CheckAdmin(authorizationName))
+                        {
+                            ParseJson(message);
+                            int from = jsonData.FromPosition;
+                            int to = jsonData.ToPosition;
+                            db.Reorder(from, to);
+                            ResponseOK("Position der Musikstücke wurde geändert\n");
+                        }
+                        else
+                        {
+                            ResponseError("User " + authorizationName + " ist kein Admin.\n");
+                        }
+                        
                         break;
                     default:
 

@@ -23,9 +23,12 @@ namespace PPB.Game
         //Used to handle access to game lobby
         public bool tournamentOver = false;
 
- 
+
         //
         private Database db = new Database();
+        //
+
+        static object locki = new object();
         public Game()
         {
             //Before a Game starts all players get their admin status revoked
@@ -34,41 +37,46 @@ namespace PPB.Game
 
         public List<string> Battle()
         {
-            do
+            lock (locki)
             {
-                //rounds
-                //Log that the round has started
-                gameLog.Add("Round " + roundsPlayed + " has started.\n");
-                Outcome battleOutcome;
-                for (int i = 0; i < tournamentContestants.Count; i++)
+                do
                 {
-                    for (int j = i + 1; j < tournamentContestants.Count; j++)
+
+                    //Log that the round has started
+                    gameLog.Add("Round " + roundsPlayed + " has started.\n");
+                    ClearBattlePoints();
+                    Outcome battleOutcome;
+                    for (int i = 0; i < tournamentContestants.Count; i++)
                     {
-                        battleOutcome = DetermineOutcome(tournamentContestants[i].set[roundsPlayed-1], tournamentContestants[j].set[roundsPlayed-1]);
-                        if (battleOutcome == Outcome.Win)
+                        for (int j = i + 1; j < tournamentContestants.Count; j++)
                         {
-                            tournamentContestants[i].BattleWon();
-                            //Log who won
-                            gameLog.Add(tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed-1] + " won against " + tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed-1] + "\n");
-                        }
-                        else if (battleOutcome == Outcome.Lose)
-                        {
-                            tournamentContestants[j].BattleWon();
-                            //Log enemy won
-                            gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed-1] + " won against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed-1] + "\n");
+                            battleOutcome = DetermineOutcome(tournamentContestants[i].set[roundsPlayed - 1], tournamentContestants[j].set[roundsPlayed - 1]);
+                            if (battleOutcome == Outcome.Win)
+                            {
+                                tournamentContestants[i].BattleWon();
+                                //Log who won
+                                gameLog.Add(tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed - 1] + " won against " + tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed - 1] + "\n");
+                            }
+                            else if (battleOutcome == Outcome.Lose)
+                            {
+                                tournamentContestants[j].BattleWon();
+                                //Log enemy won
+                                gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed - 1] + " won against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed - 1] + "\n");
 
-                        }
-                        else
-                        {
-                            gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed-1] + " played a draw  against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed-1] + "\n");
+                            }
+                            else
+                            {
+                                gameLog.Add(tournamentContestants[j].username + " with " + tournamentContestants[j].set[roundsPlayed - 1] + " played a draw  against " + tournamentContestants[i].username + " with " + tournamentContestants[i].set[roundsPlayed - 1] + "\n");
 
+                            }
                         }
                     }
-                }
-                SortByBattlePoints();
-                FindRoundWinner();
-                roundsPlayed++;
-            } while (roundsPlayed <= 5);
+                    SortByBattlePoints();
+                    FindRoundWinner();
+                    roundsPlayed++;
+
+                } while (roundsPlayed <= 5);
+            }
 
             SortByRoundPoints();
             FindWinner();
@@ -99,18 +107,14 @@ namespace PPB.Game
         }
         public void FindRoundWinner()
         {
-            for (int i = 0; i+1 < tournamentContestants.Count ; i++)
+            for (int i = 0; i + 1 < tournamentContestants.Count; i++)
             {
-                if (i == 0)
+                if (i == 0 && tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints)
                 {
                     //Check if the first player in sorted list is really the winner or ties
-                    if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints)
-                    {
-                        tournamentContestants[i].RoundWon();
-                        //Log who won th round
-                        gameLog.Add(tournamentContestants[i].username + " won Round " + roundsPlayed + "\n");
-                    }
-
+                    tournamentContestants[i].RoundWon();
+                    //Log who won th round
+                    gameLog.Add(tournamentContestants[i].username + " won Round " + roundsPlayed + "\n");
                 }
                 //Now that we have a predecessor we can check normally for the winner
                 else if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints && tournamentContestants[i].battlePoints != tournamentContestants[i - 1].battlePoints)
@@ -121,25 +125,21 @@ namespace PPB.Game
                 }
                 else
                 {
-                   gameLog.Add("No Winner in Round " + (roundsPlayed + 1) + "\n");
+                    gameLog.Add("No Winner in Round " + roundsPlayed + "\n");
                 }
             }
         }
 
         public void FindWinner()
         {
-            for (int i = 0; i+1 < tournamentContestants.Count; i++)
+            for (int i = 0; i + 1 < tournamentContestants.Count; i++)
             {
-                if (i == 0)
+                if (i == 0 && tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints)
                 {
                     //Check if the first player in sorted list is really the winner or ties
-                    if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && i == 0)
-                    {
-                        tournamentContestants[i].GiveAdministrator();
-                        //Log who won the game
-                        gameLog.Add(tournamentContestants[i].username + " won the game \n");
-
-                    }
+                    tournamentContestants[i].GiveAdministrator();
+                    //Log who won the game
+                    gameLog.Add(tournamentContestants[i].username + " won the game \n");
 
                 }
                 //Now that we have a predecessor we can check normally for the winner
@@ -156,19 +156,26 @@ namespace PPB.Game
             }
         }
 
-        public void SortByBattlePoints()
+        private void SortByBattlePoints()
         {
 
             tournamentContestants = tournamentContestants.OrderBy(player => player.battlePoints).ToList();
             tournamentContestants.Reverse();
         }
 
-        public void SortByRoundPoints()
+        private void SortByRoundPoints()
         {
             tournamentContestants = tournamentContestants.OrderBy(player => player.roundPoints).ToList();
             tournamentContestants.Reverse();
         }
 
+        private void ClearBattlePoints()
+        {
+            foreach (User player in tournamentContestants)
+            {
+                player.battlePoints = 0;
+            }
+        }
 
     }
 }

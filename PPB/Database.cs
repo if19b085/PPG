@@ -57,6 +57,30 @@ namespace PPB
             }
         }
 
+        public bool CheckAdmin(string username)
+        {
+            connect.Open();
+            var query = "SELECT COUNT(*) FROM public.users WHERE username= @username AND admin = 'true';";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            int countAll = 0;
+            while (reader.Read())
+            {
+                countAll = reader.GetInt32(0);
+            }
+            connect.Close();
+            if (countAll == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public bool ChangeBio(string username, string publicname, string bio, string image)
         {
             string query = "UPDATE public. users SET publicname = @publicname, bio = @bio, image = @image WHERE username = @username;";
