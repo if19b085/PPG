@@ -32,8 +32,7 @@ namespace PPB.Game
         public User winner;
         public Game()
         {
-            //Before a Game starts all players get their admin status revoked
-            db.TakeAdministrator();
+            
         }
 
         public List<string> Battle()
@@ -165,6 +164,8 @@ namespace PPB.Game
             {
                 if (i == 0 && tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints)
                 {
+                    //If a new administrator is decided potential other administartors loose their status
+                    db.TakeAdministrator();
                     //Check if the first player in sorted list is really the winner or ties
                     tournamentContestants[i].GiveAdministrator();
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
@@ -174,6 +175,8 @@ namespace PPB.Game
                 //Now that we have a predecessor we can check normally for the winner until the penultimate item
                 else if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && tournamentContestants[i].roundPoints != tournamentContestants[i - 1].roundPoints)
                 {
+                    //If a new administrator is decided potential other administartors loose their status
+                    db.TakeAdministrator();
                     tournamentContestants[i].GiveAdministrator();
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
                     winner = tournamentContestants[i];
@@ -183,6 +186,8 @@ namespace PPB.Game
             //The last item is checked seperatedly after the for loop
             if (tournamentContestants[i].battlePoints != tournamentContestants[i-1].battlePoints)
             {
+                //If a new administrator is decided potential other administartors loose their status
+                db.TakeAdministrator();
                 tournamentContestants[i].GiveAdministrator();
                 gameLog.Add(tournamentContestants[i].username + " won the game \n");
                 winner = tournamentContestants[i];
