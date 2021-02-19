@@ -193,7 +193,7 @@ namespace PPB.Http
                         string handtypes = jsonData.actions;
                         if (ValidHandtype(handtypes) && db.ChangeAction(authorizationName, handtypes))
                         {
-                            ResponseOK("Actions des Users " + authorizationName + " wuden geändert.\n");
+                            ResponseOK("Actions des Users " + authorizationName + " wurden geändert.\n");
                         }
                         else
                         {
