@@ -8,12 +8,12 @@ namespace PPB
     {
         public NpgsqlConnection connect = new NpgsqlConnection(@"Server=localhost;port=5432;user id=postgres; password=password; database=PPB");
 
-        
+
         public bool AddUser(string username, string password)
         {
             try
             {
-                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password, 0, 0,'', ':))', @username,  'false', 100, 'SSSSS');";
+                string query = "INSERT INTO public.users(username, password, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password,'', ':))', @username,  'false', 100, 'SSSSS');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);
@@ -202,9 +202,30 @@ namespace PPB
             }
         }
 
-        public bool GainPoints(string username)
+        public bool GainPoints(string username, int points)
         {
-            string query = "UPDATE public.users SET gamepoints = gamepoints + 1  WHERE username = @username;";
+            string query = "UPDATE public.users SET gamepoints = gamepoints + @points  WHERE username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("points", points);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
+
+        public bool LostPoints(string username)
+        {
+            string query = "UPDATE public.users SET gamepoints = gamepoints - 1  WHERE username = @username;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
             cmd.Parameters.AddWithValue("username", username);
@@ -236,7 +257,7 @@ namespace PPB
             {
                 connect.Close();
             }
-           
+
         }
         public string Scoreboard()
         {
@@ -260,8 +281,7 @@ namespace PPB
         //MMC Related
         public bool AddMMC(string username, string title, string artist = "", string genre = "", string length = "", string type = "", string size = "", string url = "", string rating = "", string album = "")
         {
-            try
-            {
+
             string query = "INSERT INTO public.mmc (title, artist, genre, length, type, size, url, rating, album) VALUES (@title, @artist, @genre, @length, @type, @size, @url, @rating, @album); ";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
@@ -276,33 +296,36 @@ namespace PPB
             cmd.Parameters.AddWithValue("album", album);
             cmd.Prepare();
             int n = cmd.ExecuteNonQuery();
-            connect.Close();
-            return true;
-            }
-            catch (Exception)
+            if (n == 0)
             {
-            connect.Close();
+                connect.Close();
                 return false;
             }
+            else
+            {
+                connect.Close();
+                return true;
+            }
+
         }
         public bool AddMMCToLibrary(string username, string title)
         {
             try
             {
-            string query =  "INSERT INTO public.user_mmc (username, title) VALUES(@username, @title); ";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("title", title);
-            cmd.Prepare();
-            int n = cmd.ExecuteNonQuery();
-            connect.Close();
-            return true;
+                string query = "INSERT INTO public.user_mmc (username, title) VALUES(@username, @title); ";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                connect.Open();
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                connect.Close();
+                return true;
             }
             catch (Exception)
             {
-            connect.Close();
-                 return false;
+                connect.Close();
+                return false;
             }
 
         }
@@ -331,32 +354,25 @@ namespace PPB
 
         public bool DeleteMMCfromLibrary(string username, string title)
         {
-            try
-            { 
-                connect.Open();
-                var query = "DELETE  FROM public.user_mmc WHERE title=@title AND username=@username;";
-                using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                cmd.Parameters.AddWithValue("username", username);
-                cmd.Parameters.AddWithValue("title", title);
-                cmd.Prepare();
-                int n = cmd.ExecuteNonQuery();
-                if(n == 0)
-                {
-                    throw new Exception("Deletion was not possible.");
-                }
-                connect.Close();
-                return true;
-
-            }
-            catch(Exception)
+            connect.Open();
+            var query = "DELETE  FROM public.user_mmc WHERE title=@title AND username=@username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("title", title);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 0)
             {
                 connect.Close();
                 return false;
             }
-            
+            else
+            {
+                connect.Close();
+                return true;
+            }
         }
 
-        //Global
         public bool AddSongToGlobal(string title)
         {
             try
@@ -410,7 +426,7 @@ namespace PPB
             while (reader.Read())
             {
                 global.Add(line, reader.GetString(0));
-               
+
                 line++;
             }
             connect.Close();
@@ -429,7 +445,7 @@ namespace PPB
             foreach (var song in global)
             {
                 connect.Open();
-                query = "INSERT INTO public.global(title) VALUES('"+song.Value+"');";
+                query = "INSERT INTO public.global(title) VALUES('" + song.Value + "');";
                 cmd = new NpgsqlCommand(query, connect);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();

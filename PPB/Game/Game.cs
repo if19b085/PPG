@@ -37,11 +37,11 @@ namespace PPB.Game
 
         public List<string> Battle()
         {
+            PointBet();
             lock (locki)
             {
                 do
                 {
-
                     //Log that the round has started
                     gameLog.Add("Round " + roundsPlayed + " has started.\n");
                     ClearBattlePoints();
@@ -110,7 +110,7 @@ namespace PPB.Game
             /* Find Winner gets an ordered List:
              * Criteria for being winner:
              * -I have to have the most point without draw
-             * We earch the ordered list from top to bottom an check if the following item is lower in points than me
+             * We search the ordered list from top to bottom an check if the following item is lower in points than me
              * an the previos item doesnt draw with me.
              * The upmost and downmost item need seperate cases because the do not have previos or following items.
             */
@@ -157,16 +157,16 @@ namespace PPB.Game
              * -I have to have the most point without draw
              * We earch the ordered list from top to bottom an check if the following item is lower in points than me
              * an the previos item doesnt draw with me.
-             * The upmost and downmost item need seperate cases because the do not have previos or following items.
+             * The upmost and downmost item need seperate cases because they do not have previos or following items.
             */
             int i = 0;
             for (i = 0; i+1 < tournamentContestants.Count; i++)
             {
+                //Check if the first player in sorted list is really the winner or ties
                 if (i == 0 && tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints)
                 {
                     //If a new administrator is decided potential other administartors loose their status
                     db.TakeAdministrator();
-                    //Check if the first player in sorted list is really the winner or ties
                     tournamentContestants[i].GiveAdministrator();
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
                     winner = tournamentContestants[i];
@@ -196,6 +196,7 @@ namespace PPB.Game
             }
             else
             {
+                UndoBet();
                 gameLog.Add("No winner in this  game. \n");
                 return;
             }
@@ -222,6 +223,26 @@ namespace PPB.Game
                 player.battlePoints = 0;
             }
         }
+        private void PointBet()
+        {
+            /* At the beginning of every game every participants "bets" one point, the winner gains two points.
+             * So in the end everyone lost one point and the winner gained one point.
+             In case of a draw this needs to be undone. -> UndoBet()*/
 
+            foreach(User player in tournamentContestants)
+            {
+                player.BetPoint();
+            }
+        }
+
+        private void UndoBet()
+        {
+            /* Look at PointBet() defintion*/
+            foreach(User player in tournamentContestants)
+            {
+                player.UndoBet();
+            }
+
+        }
     }
 }

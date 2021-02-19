@@ -89,7 +89,7 @@ namespace PPB.Http
                     ParseJson(message);
                     username = jsonData.Username;
                     title = jsonData.Name;
-                    if (db.AddMMC(authorizationName, title) && db.AddMMCToLibrary(authorizationName, title))
+                    if (db.AddMMCToLibrary(authorizationName, title))
                     {
                         ResponseOK("Musikstück mit dem Titel '" + title + "' wurde hinzugefügt.\n");
                     }
@@ -117,7 +117,7 @@ namespace PPB.Http
             if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                if(string.IsNullOrEmpty(db.GetBio(commandBlocks[2])))
+                if (string.IsNullOrEmpty(db.GetBio(commandBlocks[2])))
                 {
                     ResponseError("User mit dem Namen" + commandBlocks[2] + " hat keine Bio angegeben.\n");
                 }
@@ -141,7 +141,14 @@ namespace PPB.Http
                         ResponseOK(db.Scoreboard() + "\n");
                         break;
                     case "/lib":
-                        ResponseOK(db.ShowLibrary(authorizationName) + "\n");
+                        if (string.IsNullOrEmpty(db.ShowLibrary(authorizationName)))
+                        {
+                            ResponseError("User mit dem Namen" + authorizationName + " hat keine Titel in seiner Library.\n");
+                        }
+                        else
+                        {
+                            ResponseOK(db.ShowLibrary(authorizationName) + "\n");
+                        }
                         break;
                     case "/playlist":
                         ResponseOK(db.ShowPlaylist() + "\n");
@@ -193,7 +200,7 @@ namespace PPB.Http
                         string handtypes = jsonData.actions;
                         if (ValidHandtype(handtypes) && db.ChangeAction(authorizationName, handtypes))
                         {
-                            ResponseOK("Actions des Users " + authorizationName + " wurden geändert.\n");
+                            ResponseOK("Actions des Users " + authorizationName + " auf "+ handtypes +" wurden geändert.\n");
                         }
                         else
                         {
@@ -201,7 +208,7 @@ namespace PPB.Http
                         }
                         break;
                     case "/playlist":
-                        if(db.CheckAdmin(authorizationName))
+                        if (db.CheckAdmin(authorizationName))
                         {
                             ParseJson(message);
                             int from = jsonData.FromPosition;
@@ -213,7 +220,7 @@ namespace PPB.Http
                         {
                             ResponseError("User " + authorizationName + " ist kein Admin.\n");
                         }
-                        
+
                         break;
                     default:
 

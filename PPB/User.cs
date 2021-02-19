@@ -66,8 +66,6 @@ namespace PPB
 
         }
 
-
-
         public void BattleWon()
         {
             battlePoints++;
@@ -80,7 +78,17 @@ namespace PPB
         public void GiveAdministrator()
         {
             db.GiveAdministrator(username);
-            db.GainPoints(username);
+            db.GainPoints(username , 2);
+        }
+
+        public void BetPoint()
+        {
+            db.LostPoints(username);
+        }
+
+        public void UndoBet()
+        {
+            db.GainPoints(username, 1);
         }
     }
 }
