@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PPB.Game.Lizzard" Collapsed="true">
+    <Position X="4.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\Hands\Lizzard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Game.Paper" Collapsed="true">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\Hands\Paper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Game.Rock" Collapsed="true">
+    <Position X="4.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\Hands\Rock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Game.Scissors" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\Hands\Scissors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Game.Vulcanian" Collapsed="true">
+    <Position X="4.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\Hands\Vulcanian.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Game.Game">
+    <Position X="6.5" Y="0.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAgAAAQAYBBAYAACABCAAAAAiDAAAAAQAAAAAA=</HashCode>
+      <FileName>Game\Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="PPB.Game.Handtype" Collapsed="true">
+    <Position X="3" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAEAAAQAAAAAAAAAAAAIgAAAAAAA=</HashCode>
+      <FileName>Game\EnumsGame\EnumHandtype.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PPB.Game.Outcome" Collapsed="true">
+    <Position X="3" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Game\EnumsGame\EnumOutcome.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

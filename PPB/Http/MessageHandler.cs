@@ -221,23 +221,6 @@ namespace PPB.Http
                 }
             }
         }
-
-        public void DeleteHandler(string command)
-        {
-            if (command.Contains("/lib"))
-            {
-                string[] commandBlocks = command.Split("/");
-                string songTitle = commandBlocks[2];
-                if (db.DeleteMMCfromLibrary(authorizationName, songTitle))
-                {
-                    ResponseOK("Musikstück mit Namen'" + songTitle + "' wurde gelöscht.\n");
-                }
-                else
-                {
-                    ResponseError("Musikstück mit Namen'" + songTitle + "'konnte nicht gelöscht werden.\n");
-                }
-            }
-        }
         public void ParseJson(string _string)
         {
             if (!string.IsNullOrEmpty(_string))

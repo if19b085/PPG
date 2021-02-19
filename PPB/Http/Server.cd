@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PPB.Http.MessageHandler">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <Members>
+      <Field Name="authorizationName" Hidden="true" />
+      <Field Name="client" Hidden="true" />
+      <Field Name="command" Hidden="true" />
+      <Field Name="db" Hidden="true" />
+      <Method Name="GetHandler" Hidden="true" />
+      <Method Name="Go" Hidden="true" />
+      <Field Name="jsonData" Hidden="true" />
+      <Field Name="message" Hidden="true" />
+      <Method Name="MessageHandler" Hidden="true" />
+      <Field Name="method" Hidden="true" />
+      <Method Name="ParseJson" Hidden="true" />
+      <Method Name="PostHandler" Hidden="true" />
+      <Method Name="PutHandler" Hidden="true" />
+      <Method Name="ValidHandtype" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IBAgAAAARAAQACAAAJAAAAkAEAQAAAAACAAAFgAAACA=</HashCode>
+      <FileName>Http\MessageHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Http.Request">
+    <Position X="0.5" Y="2.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAABAAAEQAAwAAAAAAAAAAAAEACA=</HashCode>
+      <FileName>Http\Request.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PPB.Http.Server">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="db" Hidden="true" />
+      <Field Name="gameLog" Hidden="true" />
+      <Field Name="gameLogList" Hidden="true" />
+      <Field Name="host" Hidden="true" />
+      <Field Name="listener" Hidden="true" />
+      <Field Name="NAME" Hidden="true" />
+      <Field Name="running" Hidden="true" />
+      <Field Name="singleHost" Hidden="true" />
+      <Field Name="VERSION" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AgCAAAAAACAQAQAAAAAAAEAAAIgAAAAAAAkAAAAAAEo=</HashCode>
+      <FileName>Http\Server.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
