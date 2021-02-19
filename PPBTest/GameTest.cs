@@ -8,87 +8,110 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
-        PPB.User primus = new PPB.User("username", "password");
         
+        PPB.User quartus = new PPB.User("tertius", "SSSSS");
+        PPB.User quintus = new PPB.User("quintus", "SSSSS");
+
 
         [Test]
         public void ClassExists()
         {
             PPB.Game.Game game = new PPB.Game.Game();
-            Assert.IsNotNull(primus);
+            Assert.IsNotNull(game);
         }
 
-        /*
+        
         [Test]
         public void OutcomeRockvsPaper()
         {
-            Assert.Equals(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Paper));
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.AreEqual(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Paper));
         }
 
         [Test]
         public void OutcomeLizzardvsVulcanian()
         {
-            Assert.Equals(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Vulcanian));
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.AreEqual(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Vulcanian));
         }
 
         [Test]
         public void OutcomePapervsLizzard()
         {
-            Assert.Equals(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Lizzard));
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.AreEqual(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Lizzard));
         }
 
         [Test]
         public void OutcomeSciccorsvsLizzard()
         {
-            Assert.Equals(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Lizzard));
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.AreEqual(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Lizzard));
         }
 
         [Test]
         public void OutcomeDraw()
         {
-            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Rock));
-            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Paper));
-            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Scissors));
-            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Lizzard));
-            Assert.Equals(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Vulcanian, PPB.Game.Handtype.Vulcanian));
+            PPB.Game.Game game = new PPB.Game.Game();
+            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Rock));
+            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Paper));
+            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Scissors));
+            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Lizzard));
+            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Vulcanian, PPB.Game.Handtype.Vulcanian));
         }
 
         
         [Test]
-        public void RoundWinnerNoDraw()
-        {
-            Assert.Pass();
-        }
-
-        [Test]
-        public void RoundWinnerWithDraw()
-        {
-            Assert.Pass();
-        }
-
-        [Test]
-        public void NoRoundWinner()
-        {
-            Assert.Pass();
-        }
-        [Test]
 
         public void WinnerNoDraw()
         {
-            Assert.Pass();
+            /*Testing a "normal" game where one participants has a hand which beats all other hands*/
+            List<PPB.User> users = new List<PPB.User>();
+            PPB.User primus = new PPB.User("primus", "SSSSS");
+            users.Add(primus);
+            PPB.User secundus = new PPB.User("secundus", "SSSSS");
+            users.Add(secundus);
+            PPB.User tertius = new PPB.User("tertius", "RRRRR");
+            users.Add(tertius);
+            PPB.Game.Game game = new PPB.Game.Game();
+            game.tournamentContestants = users;
+
+            Assert.AreEqual(tertius, game.winner);
         }
 
         [Test]
         public void WinnerWithDraw()
         {
-            Assert.Pass();
+            /*Testing a game where a participant wins because the two better hands draw*/
+            List<PPB.User> users = new List<PPB.User>();
+            PPB.User primus = new PPB.User("primus", "SSSSS");
+            users.Add(primus);
+            PPB.User secundus = new PPB.User("secundus", "SSSSS");
+            users.Add(secundus);
+            PPB.User tertius = new PPB.User("tertius", "PPPPP");
+            users.Add(tertius);
+            PPB.Game.Game game = new PPB.Game.Game();
+            game.tournamentContestants = users;
+
+            Assert.AreEqual(tertius, game.winner);
         }
 
         [Test]
         public void NoWinner()
         {
-            Assert.Pass();
-        }*/
+            /* Testing a game where every participant plays a draw*/
+            List<PPB.User> users = new List<PPB.User>();
+            PPB.User primus = new PPB.User("primus", "SSSSS");
+            users.Add(primus);
+            PPB.User secundus = new PPB.User("secundus", "SSSSS");
+            users.Add(secundus);
+            PPB.User tertius = new PPB.User("tertius", "SSSSS");
+            users.Add(tertius);
+            PPB.Game.Game game = new PPB.Game.Game();
+            game.tournamentContestants = users;
+
+            Assert.IsNull(game.winner);
+        }
         
     }
 

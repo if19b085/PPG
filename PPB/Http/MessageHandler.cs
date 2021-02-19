@@ -117,7 +117,11 @@ namespace PPB.Http
             if (command.Contains("/users"))
             {
                 string[] commandBlocks = command.Split("/");
-                if (string.Compare(commandBlocks[2], authorizationName) == 0)
+                if(string.IsNullOrEmpty(db.GetBio(commandBlocks[2])))
+                {
+                    ResponseError("User mit dem Namen" + commandBlocks[2] + " hat keine Bio angegeben.\n");
+                }
+                else if (string.Compare(commandBlocks[2], authorizationName) == 0)
                 {
                     ResponseOK(db.GetBio(commandBlocks[2]) + "\n");
                 }

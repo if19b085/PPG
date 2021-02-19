@@ -13,7 +13,7 @@ namespace PPB
         {
             try
             {
-                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password, 0, 0,'Hier könnte ihre Werbung stehen.', ':))', @username,  'false', 100, 'SSSSS');";
+                string query = "INSERT INTO public.users(username,password,battlepoints, roundpoints, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password, 0, 0,'', ':))', @username,  'false', 100, 'SSSSS');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);

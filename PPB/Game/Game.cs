@@ -27,8 +27,9 @@ namespace PPB.Game
         //
         private Database db = new Database();
         //
-
         static object locki = new object();
+        //For Testing
+        public User winner;
         public Game()
         {
             //Before a Game starts all players get their admin status revoked
@@ -140,7 +141,7 @@ namespace PPB.Game
                     tournamentContestants[i].GiveAdministrator();
                     //Log who won the game
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
-
+                    winner = tournamentContestants[i];
                 }
                 //Now that we have a predecessor we can check normally for the winner
                 else if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && tournamentContestants[i].roundPoints != tournamentContestants[i - 1].roundPoints)
@@ -148,6 +149,7 @@ namespace PPB.Game
                     tournamentContestants[i].GiveAdministrator();
                     //Log who won the game
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
+                    winner = tournamentContestants[i];
                 }
                 else
                 {
