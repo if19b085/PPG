@@ -8,10 +8,6 @@ namespace PPBTest
     [TestFixture]
     public class GameTest
     {
-        
-        PPB.User quartus = new PPB.User("tertius", "SSSSS");
-        PPB.User quintus = new PPB.User("quintus", "SSSSS");
-
 
         [Test]
         public void ClassExists()
@@ -75,7 +71,7 @@ namespace PPBTest
             users.Add(tertius);
             PPB.Game.Game game = new PPB.Game.Game();
             game.tournamentContestants = users;
-
+            game.Battle();
             Assert.AreEqual(tertius, game.winner);
         }
 
@@ -92,7 +88,7 @@ namespace PPBTest
             users.Add(tertius);
             PPB.Game.Game game = new PPB.Game.Game();
             game.tournamentContestants = users;
-
+            game.Battle();
             Assert.AreEqual(tertius, game.winner);
         }
 
@@ -109,7 +105,7 @@ namespace PPBTest
             users.Add(tertius);
             PPB.Game.Game game = new PPB.Game.Game();
             game.tournamentContestants = users;
-
+            game.Battle();
             Assert.IsNull(game.winner);
         }
         

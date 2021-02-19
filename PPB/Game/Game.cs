@@ -108,54 +108,93 @@ namespace PPB.Game
         }
         public void FindRoundWinner()
         {
-            for (int i = 0; i + 1 < tournamentContestants.Count; i++)
+            /* Find Winner gets an ordered List:
+             * Criteria for being winner:
+             * -I have to have the most point without draw
+             * We earch the ordered list from top to bottom an check if the following item is lower in points than me
+             * an the previos item doesnt draw with me.
+             * The upmost and downmost item need seperate cases because the do not have previos or following items.
+            */
+            int i = 0;
+            for (i = 0; i + 1 < tournamentContestants.Count; i++)
             {
                 if (i == 0 && tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints)
                 {
                     //Check if the first player in sorted list is really the winner or ties
                     tournamentContestants[i].RoundWon();
-                    //Log who won th round
                     gameLog.Add(tournamentContestants[i].username + " won Round " + roundsPlayed + "\n");
+                    return;
                 }
                 //Now that we have a predecessor we can check normally for the winner
                 else if (tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints && tournamentContestants[i].battlePoints != tournamentContestants[i - 1].battlePoints)
                 {
                     tournamentContestants[i].RoundWon();
-                    //Log who won the round
                     gameLog.Add(tournamentContestants[i].username + " won Round " + roundsPlayed + "\n");
+                    return;
                 }
-                else
-                {
-                    gameLog.Add("No Winner in Round " + roundsPlayed + "\n");
-                }
+
             }
+            //The last item is checked seperatedly after the for loop
+            if (tournamentContestants[i].battlePoints != tournamentContestants[i-1].battlePoints)
+            {
+                tournamentContestants[i].RoundWon();
+                gameLog.Add(tournamentContestants[i].username + " won Round " + roundsPlayed + "\n");
+                return;
+
+            }
+            else
+            {
+                gameLog.Add("No Winner in Round " + roundsPlayed + "\n");
+                return;
+            }
+
+
         }
 
         public void FindWinner()
         {
-            for (int i = 0; i + 1 < tournamentContestants.Count; i++)
+            /* Find Winner gets an ordered List:
+             * Criteria for being winner:
+             * -I have to have the most point without draw
+             * We earch the ordered list from top to bottom an check if the following item is lower in points than me
+             * an the previos item doesnt draw with me.
+             * The upmost and downmost item need seperate cases because the do not have previos or following items.
+            */
+            int i = 0;
+            for (i = 0; i+1 < tournamentContestants.Count; i++)
             {
                 if (i == 0 && tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints)
                 {
                     //Check if the first player in sorted list is really the winner or ties
                     tournamentContestants[i].GiveAdministrator();
-                    //Log who won the game
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
                     winner = tournamentContestants[i];
+                    return;
                 }
-                //Now that we have a predecessor we can check normally for the winner
+                //Now that we have a predecessor we can check normally for the winner until the penultimate item
                 else if (tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints && tournamentContestants[i].roundPoints != tournamentContestants[i - 1].roundPoints)
                 {
                     tournamentContestants[i].GiveAdministrator();
-                    //Log who won the game
                     gameLog.Add(tournamentContestants[i].username + " won the game \n");
                     winner = tournamentContestants[i];
-                }
-                else
-                {
-                    gameLog.Add("No winner in this  game. \n");
+                    return;
                 }
             }
+            //The last item is checked seperatedly after the for loop
+            if (tournamentContestants[i].battlePoints != tournamentContestants[i-1].battlePoints)
+            {
+                tournamentContestants[i].GiveAdministrator();
+                gameLog.Add(tournamentContestants[i].username + " won the game \n");
+                winner = tournamentContestants[i];
+                return;
+
+            }
+            else
+            {
+                gameLog.Add("No winner in this  game. \n");
+                return;
+            }
+
         }
 
         private void SortByBattlePoints()
