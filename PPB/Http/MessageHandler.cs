@@ -129,7 +129,7 @@ namespace PPB.Http
                     }
                     else
                     {
-                        ResponseError("Musikstück mit dem Titel '" + title + "' ist in der LIbrary von " + authorizationName + " nicht vorhanden.\n");
+                        ResponseError("Musikstück mit dem Titel '" + title + "' ist in der Library von " + authorizationName + " nicht vorhanden.\n");
                     }
 
                     break;
@@ -149,7 +149,7 @@ namespace PPB.Http
                     }
                     break;
                 default:
-                    ResponseOK("Etwas wird noch nich behandelt.\n");
+                    ResponseOK("Etwas wird noch nicht behandelt.\n");
                     break;
             }
 
@@ -303,7 +303,6 @@ namespace PPB.Http
         }
         public void ResponseOK(string message, string status = "200")
         {
-            //Dispossed Object cannot be accssed Exception needs to be fixed /handled
             StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Server.VERSION + " " + status);

@@ -15,47 +15,6 @@ namespace PPBTest
             PPB.Game.Game game = new PPB.Game.Game();
             Assert.IsNotNull(game);
         }
-
-        
-        [Test]
-        public void OutcomeRockvsPaper()
-        {
-            PPB.Game.Game game = new PPB.Game.Game();
-            Assert.AreEqual(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Paper));
-        }
-
-        [Test]
-        public void OutcomeLizzardvsVulcanian()
-        {
-            PPB.Game.Game game = new PPB.Game.Game();
-            Assert.AreEqual(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Vulcanian));
-        }
-
-        [Test]
-        public void OutcomePapervsLizzard()
-        {
-            PPB.Game.Game game = new PPB.Game.Game();
-            Assert.AreEqual(PPB.Game.Outcome.Lose, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Lizzard));
-        }
-
-        [Test]
-        public void OutcomeSciccorsvsLizzard()
-        {
-            PPB.Game.Game game = new PPB.Game.Game();
-            Assert.AreEqual(PPB.Game.Outcome.Win, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Lizzard));
-        }
-
-        [Test]
-        public void OutcomeDraw()
-        {
-            PPB.Game.Game game = new PPB.Game.Game();
-            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Rock, PPB.Game.Handtype.Rock));
-            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Paper, PPB.Game.Handtype.Paper));
-            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Scissors, PPB.Game.Handtype.Scissors));
-            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Lizzard, PPB.Game.Handtype.Lizzard));
-            Assert.AreEqual(PPB.Game.Outcome.Draw, game.DetermineOutcome(PPB.Game.Handtype.Vulcanian, PPB.Game.Handtype.Vulcanian));
-        }
-
         
         [Test]
 

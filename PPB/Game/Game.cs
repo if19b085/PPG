@@ -41,7 +41,7 @@ namespace PPB.Game
                 do
                 {
                     //Log that the round has started
-                    gameLog.Add("Round " + roundsPlayed + " has started.\n");
+                       gameLog.Add("Round " + roundsPlayed + " has started.\n");
                     ClearBattlePoints();
                     Outcome battleOutcome;
                     for (int i = 0; i < tournamentContestants.Count; i++)

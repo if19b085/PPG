@@ -48,7 +48,7 @@ namespace PPB
                                 break;
                             default:
                                 //Give some feedback that a wrong handtype was entered
-                                throw new InvalidOperationException("Wrong handtype entered at position: " + i);
+                                throw new InvalidOperationException("Wrong handtype entered.");
                         }
                     }
 
