@@ -114,8 +114,39 @@ namespace PPB.Http
                 case "/playlist":
                     ParseJson(message);
                     title = jsonData.Name;
-                    db.AddSongToGlobal(title);
-                    ResponseOK("Musikstück mit dem Titel '" + title + "' konnte globaler Playlist hinzugefügt werden.\n");
+
+                    if (db.CheckLibrary(title, authorizationName))
+                    {
+                        if (db.CheckBlacklist(db.UrlFromTitle(title)))
+                        {
+                            ResponseError("Musikstück taucht in der Blacklist auf.\n");
+                        }
+                        else
+                        {
+                            db.AddSongToGlobal(title);
+                            ResponseOK("Musikstück mit dem Titel '" + title + "' wurde der globalen Playlist hinzugefügt.\n");
+                        }
+                    }
+                    else
+                    {
+                        ResponseError("Musikstück mit dem Titel '" + title + "' ist in der LIbrary von " + authorizationName + " nicht vorhanden.\n");
+                    }
+
+                    break;
+                case "/blacklist":
+                    if (db.CheckAdmin(authorizationName))
+                    {
+                        ParseJson(message);
+                        title = jsonData.Name;
+                        string url = jsonData.Url;
+                        db.AddBlacklist(url, title);
+                        ResponseOK("Musikstück mit dem Titel '" + title + "'wurde der Blacklist hinzugefügt.\n");
+
+                    }
+                    else
+                    {
+                        ResponseError("User " + authorizationName + " ist kein Admin.\n");
+                    }
                     break;
                 default:
                     ResponseOK("Etwas wird noch nich behandelt.\n");
@@ -131,7 +162,7 @@ namespace PPB.Http
                 string[] commandBlocks = command.Split("/");
                 if (string.IsNullOrEmpty(db.GetBio(commandBlocks[2])))
                 {
-                    ResponseError("User mit dem Namen" + commandBlocks[2] + " hat keine Bio angegeben.\n");
+                    ResponseError("User mit dem Namen " + commandBlocks[2] + " hat keine Bio angegeben.\n");
                 }
                 else if (string.Compare(commandBlocks[2], authorizationName) == 0)
                 {
@@ -155,18 +186,28 @@ namespace PPB.Http
                     case "/lib":
                         if (string.IsNullOrEmpty(db.ShowLibrary(authorizationName)))
                         {
-                            ResponseError("User mit dem Namen" + authorizationName + " hat keine Titel in seiner Library.\n");
+                            ResponseError("User mit dem Namen " + authorizationName + " hat keine Titel in seiner Library.\n");
                         }
                         else
                         {
-                            ResponseOK(db.ShowLibrary(authorizationName) + "\n");
+
+                            ResponseOK("Library des Users " + authorizationName + " :\n" + db.ShowLibrary(authorizationName) + "\n");
                         }
                         break;
                     case "/playlist":
-                        ResponseOK(db.ShowPlaylist() + "\n");
+                        if (string.IsNullOrEmpty(db.ShowPlaylist()))
+                        {
+                            ResponseError("Globale Playlist ist noch leer.\n");
+                        }
+                        else
+                        {
+
+                            ResponseOK(db.ShowPlaylist() + "\n");
+                        }
+                        
                         break;
                     case "/actions":
-                        ResponseOK(db.GetActions(authorizationName) + "\n");
+                        ResponseOK("Actions des Users "+authorizationName+" :" + db.GetActions(authorizationName) + "\n");
                         break;
                     default:
                         ResponseOK("Etwas wird noch nicht behandelt.\n");
@@ -209,7 +250,7 @@ namespace PPB.Http
                         string handtypes = jsonData.actions;
                         if (ValidHandtype(handtypes) && db.ChangeAction(authorizationName, handtypes))
                         {
-                            ResponseOK("Actions des Users " + authorizationName + " auf " + handtypes + " wurden geändert.\n");
+                            ResponseOK("Actions des Users " + authorizationName + " wurden auf " + handtypes + " geändert.\n");
                         }
                         else
                         {

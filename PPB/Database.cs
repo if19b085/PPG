@@ -13,7 +13,7 @@ namespace PPB
         {
             try
             {
-                string query = "INSERT INTO public.users(username, password, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password,'', ':))', @username,  'false', 100, 'SSSSS');";
+                string query = "INSERT INTO public.users(username, password, bio, image, publicname, admin, gamepoints, handtypes) values(@username, @password,'', ':))', @username,  'false', 100, 'VVVVV');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 connect.Open();
                 cmd.Parameters.AddWithValue("username", username);
@@ -182,26 +182,6 @@ namespace PPB
             }
         }
 
-        public bool GiveAdministrator(string username)
-        {
-            string query = "UPDATE public.users SET admin = 'true' WHERE username = @username;";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Prepare();
-            int n = cmd.ExecuteNonQuery();
-            if (n == 1)
-            {
-                connect.Close();
-                return true;
-            }
-            else
-            {
-                connect.Close();
-                return false;
-            }
-        }
-
         public bool GainPoints(string username, int points)
         {
             string query = "UPDATE public.users SET gamepoints = gamepoints + @points  WHERE username = @username;";
@@ -226,6 +206,25 @@ namespace PPB
         public bool LostPoints(string username)
         {
             string query = "UPDATE public.users SET gamepoints = gamepoints - 1  WHERE username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 1)
+            {
+                connect.Close();
+                return true;
+            }
+            else
+            {
+                connect.Close();
+                return false;
+            }
+        }
+        public bool GiveAdministrator(string username)
+        {
+            string query = "UPDATE public.users SET admin = 'true' WHERE username = @username;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             connect.Open();
             cmd.Parameters.AddWithValue("username", username);
@@ -278,55 +277,42 @@ namespace PPB
 
         }
 
-        public bool AddToLibrary(string username, string title, string url , string genre = "", string length = "", string rating = "", string album = "", string persTitle = "")
+        public bool AddToLibrary(string username, string title, string url, string genre = "", string length = "", string rating = "", string album = "", string persTitle = "")
         {
-            string query = "INSERT INTO public.library (username, title, url, genre, length, rating, album, perstitle) VALUES (@username, @title, @url, @genre, @length, @rating, @album, @perstitle); ";
+            try
+            {
+                string query = "INSERT INTO public.library (username, title, url, genre, length, rating, album, perstitle) VALUES (@username, @title, @url, @genre, @length, @rating, @album, @perstitle); ";
 
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("title", title);
-            cmd.Parameters.AddWithValue("genre", genre);
-            cmd.Parameters.AddWithValue("length", length);
-            cmd.Parameters.AddWithValue("url", url);
-            cmd.Parameters.AddWithValue("rating", rating);
-            cmd.Parameters.AddWithValue("album", album);
-            cmd.Parameters.AddWithValue("perstitle", persTitle);
-            cmd.Prepare();
-            int n = cmd.ExecuteNonQuery();
-            if (n == 0)
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                connect.Open();
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Parameters.AddWithValue("genre", genre);
+                cmd.Parameters.AddWithValue("length", length);
+                cmd.Parameters.AddWithValue("url", url);
+                cmd.Parameters.AddWithValue("rating", rating);
+                cmd.Parameters.AddWithValue("album", album);
+                cmd.Parameters.AddWithValue("perstitle", persTitle);
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                if (n == 0)
+                {
+                    connect.Close();
+                    return false;
+                }
+                else
+                {
+                    connect.Close();
+                    return true;
+                }
+
+            }
+            catch (Exception)
             {
                 connect.Close();
                 return false;
             }
-            else
-            {
-                connect.Close();
-                return true;
-            }
-
-        }
-        //Library Related
-        public string ShowLibrary(string username)
-        {
-            connect.Open();
-            var query = "SELECT title FROM public.library WHERE username=@username;";
-            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Prepare();
-            NpgsqlDataReader reader = cmd.ExecuteReader();
-            string library = "";
-            int line = 1;
-            while (reader.Read())
-            {
-                string oneline = reader.GetString(0);
-                library += oneline + "\n";
-                line++;
-            }
-
-            connect.Close();
-
-            return library;
+          
         }
 
         public bool DeleteMMCfromLibrary(string username, string title)
@@ -350,6 +336,52 @@ namespace PPB
             }
         }
 
+        public string ShowLibrary(string username)
+        {
+            connect.Open();
+            var query = "SELECT title FROM public.library WHERE username=@username;";
+            using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            string library = "";
+            int line = 1;
+            while (reader.Read())
+            {
+                string oneline = reader.GetString(0);
+                library += oneline + "\n";
+                line++;
+            }
+
+            connect.Close();
+
+            return library;
+        }
+
+        public bool CheckLibrary(string title, string username)
+        {
+            connect.Open();
+            var query = "SELECT COUNT(*) FROM public.library WHERE title = @title AND username = @username;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("title", title);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            int countAll = 0;
+            while (reader.Read())
+            {
+                countAll = reader.GetInt32(0);
+            }
+            connect.Close();
+            if (countAll == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public bool AddSongToGlobal(string title)
         {
             try
@@ -427,6 +459,76 @@ namespace PPB
                 cmd.ExecuteNonQuery();
                 connect.Close();
             }
+        }
+
+        public bool AddBlacklist(string url, string title)
+        {
+            try
+            {
+                string query = "INSERT INTO public.blacklist(url, title) values(@url, @title);";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                connect.Open();
+                cmd.Parameters.AddWithValue("url", url);
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Prepare();
+                int n = cmd.ExecuteNonQuery();
+                connect.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                connect.Close();
+                return false;
+            }
+
+
+        }
+
+        public bool CheckBlacklist(string url)
+        {
+            connect.Open();
+            var query = "SELECT COUNT(*) FROM public.blacklist WHERE url = @url;";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            cmd.Parameters.AddWithValue("url", url);
+            cmd.Prepare();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            int countAll = 0;
+            while (reader.Read())
+            {
+                countAll = reader.GetInt32(0);
+            }
+            connect.Close();
+            if (countAll == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public string UrlFromTitle(string title)
+        {
+            try
+            {
+                connect.Open();
+                var query = "SELECT url FROM public.blacklist WHERE title=@title;";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Prepare();
+                string library = "";
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                library = reader.GetString(0);
+                connect.Close();
+                return library;
+            }
+            catch (Exception)
+            {
+                connect.Close();
+                return " ";
+            }
+            
         }
     }
 }
