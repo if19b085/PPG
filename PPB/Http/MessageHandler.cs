@@ -89,7 +89,22 @@ namespace PPB.Http
                     ParseJson(message);
                     username = jsonData.Username;
                     title = jsonData.Name;
-                    if (db.AddMMCToLibrary(authorizationName, title))
+
+                    string _url = jsonData.Url;
+                    string _genre = jsonData.Genre;
+                    string _length = jsonData.Length;
+                    string _rating = jsonData.Rating;
+                    string _album = jsonData.Album;
+                    string _persTitle = jsonData.Title;
+
+                    _url = CheckString(_url);
+                    _genre = CheckString(_genre);
+                    _length = CheckString(_length);
+                    _rating = CheckString(_rating);
+                    _album = CheckString(_album);
+                    _persTitle = CheckString(_persTitle);
+
+                    if (db.AddToLibrary(authorizationName, title, _url, genre:_genre, length:_length, rating:_rating, album:_album, persTitle:_persTitle))
                     {
                         ResponseOK("Musikstück mit dem Titel '" + title + "' wurde hinzugefügt.\n");
                     }
@@ -318,6 +333,18 @@ namespace PPB.Http
             }
 
             return true;
+        }
+
+        private string CheckString(string stringToCheck)
+        {
+            if(string.IsNullOrEmpty(stringToCheck))
+            {
+                return " ";
+            }
+            else
+            {
+                return stringToCheck;
+            }
         }
     }
 }

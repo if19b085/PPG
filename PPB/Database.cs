@@ -279,6 +279,7 @@ namespace PPB
         }
 
         //MMC Related
+        /*
         public bool AddMMC(string username, string title, string artist = "", string genre = "", string length = "", string type = "", string size = "", string url = "", string rating = "", string album = "")
         {
 
@@ -308,24 +309,32 @@ namespace PPB
             }
 
         }
-        public bool AddMMCToLibrary(string username, string title)
+        */
+        public bool AddToLibrary(string username, string title, string url , string genre = "", string length = "", string rating = "", string album = "", string persTitle = "")
         {
-            try
-            {
-                string query = "INSERT INTO public.user_mmc (username, title) VALUES(@username, @title); ";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                connect.Open();
-                cmd.Parameters.AddWithValue("username", username);
-                cmd.Parameters.AddWithValue("title", title);
-                cmd.Prepare();
-                int n = cmd.ExecuteNonQuery();
-                connect.Close();
-                return true;
-            }
-            catch (Exception)
+            string query = "INSERT INTO public.library (username, title, url, genre, length, rating, album, perstitle) VALUES (@username, @title, @url, @genre, @length, @rating, @album, @perstitle); ";
+
+            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("title", title);
+            cmd.Parameters.AddWithValue("genre", genre);
+            cmd.Parameters.AddWithValue("length", length);
+            cmd.Parameters.AddWithValue("url", url);
+            cmd.Parameters.AddWithValue("rating", rating);
+            cmd.Parameters.AddWithValue("album", album);
+            cmd.Parameters.AddWithValue("perstitle", persTitle);
+            cmd.Prepare();
+            int n = cmd.ExecuteNonQuery();
+            if (n == 0)
             {
                 connect.Close();
                 return false;
+            }
+            else
+            {
+                connect.Close();
+                return true;
             }
 
         }
@@ -333,7 +342,7 @@ namespace PPB
         public string ShowLibrary(string username)
         {
             connect.Open();
-            var query = "SELECT title FROM public.user_mmc WHERE username=@username;";
+            var query = "SELECT title FROM public.library WHERE username=@username;";
             using NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Prepare();
@@ -355,7 +364,7 @@ namespace PPB
         public bool DeleteMMCfromLibrary(string username, string title)
         {
             connect.Open();
-            var query = "DELETE  FROM public.user_mmc WHERE title=@title AND username=@username;";
+            var query = "DELETE  FROM public.library WHERE title=@title AND username=@username;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
             cmd.Parameters.AddWithValue("username", username);
             cmd.Parameters.AddWithValue("title", title);
@@ -412,7 +421,6 @@ namespace PPB
             connect.Close();
             return library;
         }
-        /*NOTE: Vielleicht würde ein int mit automatischer Ordnung beim query mehr Sinn ergeben*/
         public void Reorder(int FromPosition, int ToPosition)
         {
             //Get Database in Form of List
