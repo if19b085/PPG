@@ -1,12 +1,9 @@
 ﻿
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
+
 
 namespace PPB.Http
 {
@@ -104,7 +101,7 @@ namespace PPB.Http
                     _album = CheckString(_album);
                     _persTitle = CheckString(_persTitle);
 
-                    if (db.AddToLibrary(authorizationName, title, _url, genre:_genre, length:_length, rating:_rating, album:_album, persTitle:_persTitle))
+                    if (db.AddToLibrary(authorizationName, title, _url, genre: _genre, length: _length, rating: _rating, album: _album, persTitle: _persTitle))
                     {
                         ResponseOK("Musikstück mit dem Titel '" + title + "' wurde hinzugefügt.\n");
                     }
@@ -175,10 +172,7 @@ namespace PPB.Http
                         ResponseOK("Etwas wird noch nicht behandelt.\n");
                         break;
                 }
-
             }
-
-
         }
 
         public void PutHandler(string command)
@@ -215,7 +209,7 @@ namespace PPB.Http
                         string handtypes = jsonData.actions;
                         if (ValidHandtype(handtypes) && db.ChangeAction(authorizationName, handtypes))
                         {
-                            ResponseOK("Actions des Users " + authorizationName + " auf "+ handtypes +" wurden geändert.\n");
+                            ResponseOK("Actions des Users " + authorizationName + " auf " + handtypes + " wurden geändert.\n");
                         }
                         else
                         {
@@ -266,13 +260,13 @@ namespace PPB.Http
                 jsonData = JObject.Parse(_string);
             }
         }
-        public void ResponseOK(string message, string status = "200", string contentType = "plain/text")
+        public void ResponseOK(string message, string status = "200")
         {
             //Dispossed Object cannot be accssed Exception needs to be fixed /handled
             StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Server.VERSION + " " + status);
-            sb.AppendLine("Content-Type: ");
+            sb.AppendLine("Content-Type: plain/text");
             sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
             sb.AppendLine();
             sb.AppendLine(message);
@@ -281,12 +275,12 @@ namespace PPB.Http
             writer.Close();
         }
 
-        public void ResponseError(string message, string status = "400", string contentType = "plain/text")
+        public void ResponseError(string message, string status = "400")
         {
             StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Server.VERSION + " " + status);
-            sb.AppendLine("Content-Type: ");
+            sb.AppendLine("Content-Type: plain/text");
             sb.AppendLine("Content-Length: " + Encoding.UTF8.GetBytes(message).Length);
             sb.AppendLine();
             sb.AppendLine(message);
@@ -320,7 +314,6 @@ namespace PPB.Http
                                 return false;
                         }
                     }
-
                 }
                 else
                 {
@@ -331,13 +324,12 @@ namespace PPB.Http
             {
                 return false;
             }
-
             return true;
         }
 
         private string CheckString(string stringToCheck)
         {
-            if(string.IsNullOrEmpty(stringToCheck))
+            if (string.IsNullOrEmpty(stringToCheck))
             {
                 return " ";
             }

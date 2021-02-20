@@ -1,8 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace PPB.Game
 {
@@ -13,11 +11,11 @@ namespace PPB.Game
         private int roundsPlayed = 1;
 
         //Intialize the different Hands
-        Rock rock = new Rock();
-        Paper paper = new Paper();
-        Scissors scissors = new Scissors();
-        Lizzard lizzard = new Lizzard();
-        Vulcanian vulcanian = new Vulcanian();
+        public Rock rock = new Rock();
+        public Paper paper = new Paper();
+        public Scissors scissors = new Scissors();
+        public Lizzard lizzard = new Lizzard();
+        public Vulcanian vulcanian = new Vulcanian();
 
 
         //Used to handle access to game lobby
@@ -115,7 +113,7 @@ namespace PPB.Game
              * The upmost and downmost item need seperate cases because the do not have previos or following items.
             */
             int i = 0;
-            for (i = 0; i + 1 < tournamentContestants.Count; i++)
+            for (; i + 1 < tournamentContestants.Count; i++)
             {
                 if (i == 0 && tournamentContestants[i].battlePoints > tournamentContestants[i + 1].battlePoints)
                 {
@@ -160,7 +158,7 @@ namespace PPB.Game
              * The upmost and downmost item need seperate cases because they do not have previos or following items.
             */
             int i = 0;
-            for (i = 0; i+1 < tournamentContestants.Count; i++)
+            for (; i+1 < tournamentContestants.Count; i++)
             {
                 //Check if the first player in sorted list is really the winner or ties
                 if (i == 0 && tournamentContestants[i].roundPoints > tournamentContestants[i + 1].roundPoints)

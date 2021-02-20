@@ -278,38 +278,6 @@ namespace PPB
 
         }
 
-        //MMC Related
-        /*
-        public bool AddMMC(string username, string title, string artist = "", string genre = "", string length = "", string type = "", string size = "", string url = "", string rating = "", string album = "")
-        {
-
-            string query = "INSERT INTO public.mmc (title, artist, genre, length, type, size, url, rating, album) VALUES (@title, @artist, @genre, @length, @type, @size, @url, @rating, @album); ";
-            NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            connect.Open();
-            cmd.Parameters.AddWithValue("title", title);
-            cmd.Parameters.AddWithValue("artist", artist);
-            cmd.Parameters.AddWithValue("genre", genre);
-            cmd.Parameters.AddWithValue("length", length);
-            cmd.Parameters.AddWithValue("type", type);
-            cmd.Parameters.AddWithValue("size", size);
-            cmd.Parameters.AddWithValue("url", url);
-            cmd.Parameters.AddWithValue("rating", rating);
-            cmd.Parameters.AddWithValue("album", album);
-            cmd.Prepare();
-            int n = cmd.ExecuteNonQuery();
-            if (n == 0)
-            {
-                connect.Close();
-                return false;
-            }
-            else
-            {
-                connect.Close();
-                return true;
-            }
-
-        }
-        */
         public bool AddToLibrary(string username, string title, string url , string genre = "", string length = "", string rating = "", string album = "", string persTitle = "")
         {
             string query = "INSERT INTO public.library (username, title, url, genre, length, rating, album, perstitle) VALUES (@username, @title, @url, @genre, @length, @rating, @album, @perstitle); ";

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PPB
 {
@@ -14,7 +12,7 @@ namespace PPB
         public int roundPoints;
         public bool gameStarter = false;
         //
-        Database db = new Database();
+        private Database db = new Database();
 
         public User(string _username, string handtypes)
         {
