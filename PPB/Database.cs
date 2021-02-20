@@ -312,7 +312,7 @@ namespace PPB
                 connect.Close();
                 return false;
             }
-          
+
         }
 
         public bool DeleteMMCfromLibrary(string username, string title)
@@ -480,16 +480,14 @@ namespace PPB
                 connect.Close();
                 return false;
             }
-
-
         }
 
-        public bool CheckBlacklist(string url)
+        public bool CheckBlacklist(string title)
         {
             connect.Open();
-            var query = "SELECT COUNT(*) FROM public.blacklist WHERE url = @url;";
+            var query = "SELECT COUNT(*) FROM public.blacklist WHERE title = @title;";
             NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-            cmd.Parameters.AddWithValue("url", url);
+            cmd.Parameters.AddWithValue("title", title);
             cmd.Prepare();
             NpgsqlDataReader reader = cmd.ExecuteReader();
             int countAll = 0;
@@ -508,27 +506,6 @@ namespace PPB
             }
         }
 
-        public string UrlFromTitle(string title)
-        {
-            try
-            {
-                connect.Open();
-                var query = "SELECT url FROM public.blacklist WHERE title=@title;";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                cmd.Parameters.AddWithValue("title", title);
-                cmd.Prepare();
-                string library = "";
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-                library = reader.GetString(0);
-                connect.Close();
-                return library;
-            }
-            catch (Exception)
-            {
-                connect.Close();
-                return " ";
-            }
-            
-        }
+   
     }
 }

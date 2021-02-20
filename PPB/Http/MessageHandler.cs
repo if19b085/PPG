@@ -117,7 +117,7 @@ namespace PPB.Http
 
                     if (db.CheckLibrary(title, authorizationName))
                     {
-                        if (db.CheckBlacklist(db.UrlFromTitle(title)))
+                        if (db.CheckBlacklist(title))
                         {
                             ResponseError("Musikstück taucht in der Blacklist auf.\n");
                         }
@@ -137,7 +137,7 @@ namespace PPB.Http
                     if (db.CheckAdmin(authorizationName))
                     {
                         ParseJson(message);
-                        title = jsonData.Name;
+                        title = jsonData.Title;
                         string url = jsonData.Url;
                         db.AddBlacklist(url, title);
                         ResponseOK("Musikstück mit dem Titel '" + title + "'wurde der Blacklist hinzugefügt.\n");
